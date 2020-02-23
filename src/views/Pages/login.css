@@ -1,0 +1,116 @@
+.center-login {
+  display: flex;
+  justify-content: center;
+}
+.wrap-form-login {
+  justify-content: center;
+  align-content: center;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.input-login {
+  width: 100%;
+  height: 31px;
+  border: 1px solid rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+  border-radius: 4px;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.input-login:read-only:focus {
+  border: 1px solid #3B4EDC;}
+
+.input-login:focus {
+  border: 0;
+  border: 1px solid #3B4EDC;}
+
+.wrap-img-login {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFF;
+
+}
+
+.lable-input {
+  height: 18px;
+  margin-top: 20px;
+  left: calc(50% - 33px/2 - 147.5px);
+  font-family: Be Vietnam;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 18px;
+  color: #002C51;
+}
+
+.forget-pass {
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  bottom: 20px;
+  font-family: Be Vietnam;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  text-decoration-line: underline;
+  color: #273EE7;
+  cursor: pointer;
+
+}
+.icon-show-pass {
+  z-index: 10;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%)
+}
+
+.wrap-input {
+  position: relative;
+}
+
+.btn-login {
+  font-family: Be Vietnam;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 29px;
+  color: #FFF;
+  background: #3B4EDC;
+  outline: none;
+  width: 100%;
+  height: 39px;
+  margin-top: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-login:hover {
+  border: 2px solid #009CDC;
+}
+
+.text-invalid {
+  font-size: 12px;
+  color: red;
+  text-align: center;
+}
+
+.label-note {
+  font-family: Be Vietnam;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #002C51;
+}

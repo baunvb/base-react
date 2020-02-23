@@ -1,0 +1,58 @@
+.dimAlert {
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 5000;
+    position: fixed;
+
+}
+.wrapUpdateTime {
+    padding: 20px;
+    position: fixed;
+    text-align: center;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.alertStyle {
+    padding: 20px;
+    text-align: left;
+    background: #FFFFFF;
+    position: absolute;
+    border-radius: 33px;
+    max-width: 478px;
+    width: calc(100% - 40px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.alertScale {
+    animation:0.3s ease 0s 1 normal none running alertScale
+}
+
+@keyframes alertScale {
+	0% {
+		transform: scale(0.8);
+	}
+	
+	30% {
+		transform: scale(1.05);
+    }
+    
+    50% {
+		transform: scale(1.1);
+    }
+    
+    70% {
+		transform: scale(1.02);
+	}
+	
+	100% {
+		transform: scale(1) ;
+	}
+}

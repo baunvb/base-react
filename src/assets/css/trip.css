@@ -1,0 +1,41 @@
+
+.detailData {
+  margin-top: 20px;
+  margin-right: 8px;
+  border-radius: 14px;
+  background: #f9f9f9;
+}
+
+
+.tableDetail {
+  margin: 8px;
+  width: calc(100% - 16px);
+  border-collapse: collapse;
+  height: auto;
+}
+
+.trDetail {
+  border-bottom: 1px solid #d6d6d6;
+  font-size: 9px;
+  font-weight: 300;
+
+}
+
+.trDetailLast {
+  border: none;
+  font-size: 9px;
+}
+
+.tdDetail {
+  padding: 8px 0px;
+  width: 40%;
+  text-align: left;
+  vertical-align: middle;
+}
+.tdDetail2 {
+  padding: 8px 0px;
+  width: 60%;
+  text-align: right;
+  vertical-align: middle;
+}
+

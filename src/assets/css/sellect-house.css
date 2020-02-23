@@ -1,0 +1,79 @@
+.house-label {
+  display: inline-grid;
+}
+
+.house-name {
+  font-size: 14px;
+}
+.house-address {
+  font-size: 9px;
+}
+
+.tab {
+  widows: 100%;
+  margin-right: 16px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.tabItem{
+  padding: 8px 0;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-block;
+  width: 50%;
+  text-align: center;
+}
+
+.tabItem:hover {
+  background: #ffffff;
+  border: 1px solid #ff7900;
+}
+
+.active-tab {
+  background: #ffffff;
+  border: 1px solid #ff7900;
+}
+.tab-map-content {
+  margin-top: 20px;
+  width: calc(100% - 20px);
+  height: 100px;
+}
+
+.inputMap {
+  font-family: Roboto Helvetica Arial sans-serif;
+  width: 114%;
+  display: block;
+  border-radius: 0px;
+  -webkit-appearance: none;
+  padding: 5px 25px 5px 0px;
+  border-bottom: 1px solid #d6d6d6;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  font-size: 16px;
+  transform: scale(0.875);
+  transform-origin: left top;
+  word-wrap: break-word;      /* IE 5.5-7 */
+  white-space: -moz-pre-wrap; /* Firefox 1.0-2.0 */
+  white-space: pre-wrap;
+}
+.inputMap:read-only:focus {
+  box-shadow: 0 0 0px transparent;
+  border-bottom: 1px solid #d6d6d6;
+}
+.inputMap:focus {
+  border-bottom: 1.3px solid #ff7900;
+}
+.close {
+  float: right;
+  margin-top: -23px;
+  margin-right: 20px;
+}
+.close-icon {
+  color: #d6d6d6;
+  margin-top: 2px;
+  margin-left: 5px;
+  width: 15px;
+  position: absolute;
+  cursor: pointer;
+}

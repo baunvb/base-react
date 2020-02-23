@@ -1,0 +1,146 @@
+.btn-wrap {
+  text-align: center;
+}
+  .main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center
+}
+
+.card-wrap-description {
+    display: flex;
+    justify-content: center;
+}
+.wrap-description {
+    box-sizing: border-box;
+    max-width: 90%;
+    text-align: center;
+}
+.formPayment {
+  max-width: 100%;
+}
+.content-description {
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 500;
+    overflow: hidden;
+    margin: 20px auto 5px;
+}
+
+.paid-price {
+    word-break: normal;
+    line-height: 1.725em;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+.price{
+    word-break: normal;
+    line-height: 1.725em;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 14px;
+    overflow: hidden;
+    color:#ff7900;
+}
+
+.card-info {
+    height: auto;
+    border-radius: 5px;
+    margin: 20px auto;
+    width: 90%;
+}
+.btnHome {
+  margin-top: 10px;
+}
+
+/*** Table Styles **/
+
+.table-fill {
+    background: white;
+    border-collapse: collapse;
+    height: auto;
+    margin: auto;
+    padding:5px;
+    width: 100%;
+    animation: float 5s infinite;
+  }
+  
+    
+  tr {
+    border-bottom: 1px solid #d6d6d6;
+    font-size:14px;
+    font-weight:normal;
+  }
+  
+  tr:last-child td:first-child {
+    border-bottom-left-radius:3px;
+  }
+   
+  td {
+    background:#FFFFFF;
+    padding: 5px 0px;
+    text-align:left;
+    vertical-align:middle;
+    font-weight:300;
+    font-size:14px;
+  }
+  
+  th.text-left {
+    text-align: left;
+  }
+  
+  th.text-center {
+    text-align: center;
+  }
+  
+  th.text-right {
+    text-align: right;
+  }
+  
+  td.text-left {
+    width: 40%;
+    text-align: left;
+  }
+  
+  td.text-center {
+    text-align: center;
+  }
+  
+  td.text-right {
+    width: 60%;
+
+    text-align: right;
+  }
+  
+
+/* For mobile phones: */
+@media (min-width: 320px) and (max-width: 480px) {
+    .content-main{
+        width: 90%;
+    }
+
+  }
+  
+@media only screen and (min-width: 600px) {
+    /* For tablets: */
+    .content-main{
+        width: 80%;
+    }
+  }
+
+@media only screen and (min-width: 768px) {
+    /* For desktop: */
+    .content-main, .card-title{
+        width: 60%;
+    }
+   
+  }
+   
