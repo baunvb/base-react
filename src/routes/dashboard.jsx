@@ -23,7 +23,7 @@ var dashRoutes = [
   {
     hide: true,
     path: "/completebooking",
-    name: "Storage",
+    name: "Luggage Storage",
     icon: Timeline,
     component: CompleteBooking
   },
