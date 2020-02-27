@@ -1,19 +1,10 @@
 import axios from "axios";
 import { host } from "config/host";
 import { sessionService } from "redux-react-session";
+import { API } from 'config/Constant.js'
+const AGENT = "Bearer "
 
-export const addNew = (url, data, fn) => {
-    axios({
-        method: 'post',
-        url: host.concat(url),
-        data: data,
-    }).then(function (res) {
-        fn(res.data);
-    })
-        .catch(function (res) {
-            console.log(res);
-        });
-}
+const UNAUTHORIZED = 401;
 
 
 export const postRequest = (api, data, fn) => {
@@ -33,85 +24,33 @@ export const getRequest = (api, fn) => {
 }
 
 
-export const checkToken = () => {
-    sessionService.loadUser()
-        .then((value) => {
-            console.log("token_id", value.token_id);
-            let token_id = value.token_id;
-            axios.post(host.concat('checkToken'), {}, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "access_token": token_id
-                }
-            })
-                .then((res) => {
-                    console.log("checkToken", res);
-                    return res.data.message;
-                })
-                .catch((err) => console.log(err));
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-}
-
-export const postByHeader = (api, data, fn) => {
-    sessionService.loadUser()
-        .then((value) => {
-            let token_id = value.token_id;
-            axios.post(host.concat(api), data, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "access_token": token_id
-                }
-            })
-                .then((res) => {
-                    fn(res.data)
-                })
-                .catch((err) => console.log(err));
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-
-}
-
-export const getByHeader = (api, data, fn) => {
-    sessionService.loadUser()
-        .then((value) => {
-            let token_id = value.token_id;
-            axios.post(host.concat(api), data, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "access_token": token_id
-                }
-            })
-                .then((res) => {
-                    fn(res.data)
-                })
-                .catch((err) => console.log(err));
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-
-}
-
-
 export const postByToken = (api, data, fn) => {
-    sessionService.loadUser()
+    var contentType = "application/json";
+    // api accept image
+    if(api === API.REQUEST_COMFIRM_APPOINTMENT || api === API.REQUEST_COMPLETE || api === API.NEW_BOOK){
+        contentType = "multipart/form-data"
+    }
+    sessionService.loadSession()
         .then((value) => {
-            let token_id = value.token_id;
+            let token_id = value.token;
+            console.log("loadSession", value)
             axios.post(`${host}${api}`, data, {
                 headers: {
-                    "Content-Type": "application/json",
-                    "access_token": token_id
+                    "Content-Type": contentType,
+                    "authorization": AGENT + token_id
                 }
             })
                 .then((res) => {
                     fn(res.data)
                 })
-                .catch((err) => console.log(err));
+                .catch((err) => {
+                    console.log(`Request api ${api}: `, err)
+                    if (err.response && err.response.status === UNAUTHORIZED && api !== API.GET_INFO) {
+                        sessionService.deleteSession();
+                        sessionService.deleteUser();
+                        window.location.replace("/login")
+                    }
+                });
         })
         .catch((err) => {
             console.log(err);
@@ -120,19 +59,27 @@ export const postByToken = (api, data, fn) => {
 }
 
 export const getByToken = (api, fn) => {
-    sessionService.loadUser()
+    sessionService.loadSession()
         .then((value) => {
-            let token_id = value.token_id;
+            let token_id = value.token;
             axios.get(`${host}${api}`, {
                 headers: {
                     "Content-Type": "application/json",
-                    "access_token": token_id
-                }
+                    "authorization": AGENT + token_id
+                 }
             })
                 .then((res) => {
                     fn(res.data)
                 })
-                .catch((err) => console.log(err));
+                .catch((err) => {
+                    console.log(`Request api ${api}: `, err)
+                    if (err.response.status === UNAUTHORIZED  && api !== API.GET_INFO) {
+                        sessionService.deleteSession();
+                        sessionService.deleteUser();
+                        window.location.replace("/login")
+                    }
+                    fn(err.response)
+                });
         })
         .catch((err) => {
             console.log(err);

@@ -2,28 +2,27 @@ import { sessionService } from 'redux-react-session';
 import * as sessionApi from '../api/sessionApi';
 import axios from "axios";
 import {host} from "config/host";
+import {API} from "config/Constant.js";
 
 export const login = (user, history) => {
   console.log("User login", user);
   return () => {
-    return axios.post(host.concat('salepoints/signin'), user)
+    return axios.post(host.concat(API.LOGIN), user)
     .then(function (res) {
-        const token = res.data.data.token_id;
-        const message = res.data.message;
-        if(message === true){
+        const token = res.data.data.token;
+        console.log("REs", res.data);
+        if(res.data.code === 200){
           sessionService.saveSession({ token })
           .then(() => {
-            sessionService.saveUser(res.data.data)
-            .then(() => {
-              history.push('/home');
-            }).catch(err => console.error(err));
+            history.push('/home');
           }).catch(err => console.error(err));
         } else {
           alert("Mật khẩu không chính xác")
         }
 
     })
-    .catch(function (error) {
+    .catch(function (err) {
+      alert(err.response.data.message)
     });
   };
 };

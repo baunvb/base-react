@@ -4,7 +4,7 @@ import SearchComponent from "views/Station/SearchComponent.jsx";
 import "views/Station/station.css"
 import iconAdd from 'assets/img/wlicon/icon_add.png';
 import { STORAGE_STATUS } from 'config/Constant.js';
-class ConfirmBookingMng extends React.Component {
+class CompleteBookingMng extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,28 +18,29 @@ class ConfirmBookingMng extends React.Component {
   }
 
   render() {
-    const { confirmList } = this.props;
+    const { completeList } = this.props;
 
     return (
       <div>
         <SearchComponent />
         {
-          confirmList.map((item, key) => {
+          completeList.map((item, key) => {
             return (
               <ItemOrder
                 item={item}
                 key={key}
-                type={STORAGE_STATUS.CONFIRM}
+                type={STORAGE_STATUS.COMPLETE}
                 {...this.props}
               />
             )
           }
           )
         }
+        
       </div>
     )
   }
 
 }
 
-export default ConfirmBookingMng
+export default CompleteBookingMng

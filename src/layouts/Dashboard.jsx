@@ -14,7 +14,8 @@ import Header from "components/Header/Header.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 import dashboardRoutes from "routes/dashboard.jsx";
 import appStyle from "assets/jss/layouts/dashboardStyle.jsx";
-
+import GridContainer from "components/Grid/GridContainer.jsx";
+import ItemGrid from "components/Grid/ItemGrid.jsx";
 const switchRoutes = (
   <Switch>
     {dashboardRoutes.map((prop, key) => {
@@ -34,7 +35,7 @@ const switchRoutes = (
 var ps;
 
 class Dashboard extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       mobileOpen: false,
@@ -56,12 +57,6 @@ class Dashboard extends React.Component {
         suppressScrollY: false
       });
     }
-
-    requestApi.postByToken("salepoints/getLinkHouses", {}, (res) => {
-      if (res.message === true) {
-        this.props.updateState('listHome', res.data.data)
-      }
-    })
 
   }
   componentWillUnmount() {
@@ -109,13 +104,18 @@ class Dashboard extends React.Component {
             {...rest}
           />
           {/* On the /maps/full-screen-maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
-          {this.getRoute() ? (
-            <div className={classes.content}>
-              <div className={classes.container}>{switchRoutes}</div>
-            </div>
-          ) : (
-              <div className={classes.map}>{switchRoutes}</div>
-            )}
+          <GridContainer justify="center">
+            <ItemGrid sm={12} xs={12} lg={6} md={6}>
+              {this.getRoute() ? (
+                <div className={classes.content}>
+                  <div className={classes.container}>{switchRoutes}</div>
+                </div>
+              ) : (
+                  <div className={classes.map}>{switchRoutes}</div>
+                )}
+            </ItemGrid>
+          </GridContainer>
+
           {null}
         </div>
 
@@ -135,9 +135,6 @@ const mapDispatchToProps = dispatch => {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    listHomeRedux: state.booking.listHome,
-    hotel_code: state.booking.hotel_code
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(appStyle)(Dashboard))
-//export default withStyles(appStyle)(Dashboard);

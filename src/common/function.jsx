@@ -1,3 +1,8 @@
+
+import { API } from 'config/Constant';
+import axios from "axios";
+import { host } from "config/host";
+
 export const vndStyle = (vnd) => {
     if(vnd === undefined || vnd === ""){
         return 0;
@@ -48,9 +53,25 @@ export const forma24Hto12H = (time) => {
 }
 
 export const validateEmail = (email) => {
-    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (email.match(mailformat)) {
-        return true;
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+export const normalizeDateTime = time => {
+    var date = new Date(time);
+    var hh = date.getHours();
+    var mm = date.getMinutes();
+    var dd = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    return {
+        time: hh + ":" + mm,
+        date: dd + "/" + month + "/" + year
     }
-    return false;
+}
+
+export const requestPrice = async (data) => {
+    var response = await axios.post(host.concat(API.REQUEST_PRICE), data);
+    console.log(response)
+    return (response.data.code === 200) ?  response.data.data.price :  0
 }

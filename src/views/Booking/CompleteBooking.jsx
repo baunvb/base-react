@@ -1,7 +1,8 @@
 import React from 'react';
 import 'views/Booking/completebooking.css'
+import 'views/Booking/booking.css'
+
 import WhaleloInput from 'components/CustomInput/WhaleloInput.jsx'
-import { vndStyle } from 'common/function.jsx';
 import itemImage from 'assets/img/wlicon/item_img.png'
 import iconPayment from 'assets/img/wlicon/icon_money.png'
 import Radio from '@material-ui/core/Radio';
@@ -9,6 +10,9 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
+import { vndStyle, normalizeDateTime, requestPrice } from 'common/function.jsx';
+import * as requestApi from 'api/requestApi';
+import { API } from 'config/Constant';
 
 const PAYMENT_METHOD = [
   { value: "cash", label: "Pay by cash" },
@@ -20,14 +24,61 @@ const PAYMENT_METHOD = [
 class CompleteBooking extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      paymenthod: PAYMENT_METHOD[0].value
+    const { data } = this.props.location
+    if (data === undefined) {
+      window.location.href = '/home'
     }
+    console.log("Data", data)
+    this.state = {
+      "id": data.id,
+      "serial": data.serial,
+      "email": data.email,
+      "time_dropoff": new Date(data.drop_off_time),
+      "date_dropoff": new Date(data.drop_off_time),
+      "time_pickup": new Date(data.pick_up_time),
+      "date_pickup": new Date(data.pick_up_time),
+      "item_count": data.package_total,
+      fullname: data.guest_name,
+      price: data.price,
+      paymenthod: PAYMENT_METHOD[0].value,
+      resultBookingAlert: null
 
+    }
   }
 
   componentDidMount() {
 
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    const { date_dropoff, time_dropoff, date_pickup, time_pickup, item_count } = this.state;
+
+    if (prevState.date_pickup !== date_pickup || prevState.time_pickup !== time_pickup) {
+      const DateDropoff = new Date(date_dropoff);
+      const TimeDropoff = new Date(time_dropoff);
+      const DatePickup = new Date(date_pickup);
+      const TimePickup = new Date(time_pickup);
+
+      const dataPrice = {
+        "drop_off_time": `${DateDropoff.getMonth() + 1}/${DateDropoff.getDate()}/${DateDropoff.getFullYear()} ${TimeDropoff.getHours()}:${TimeDropoff.getMinutes()}`,
+        "package_total": parseInt(item_count),
+        "pick_up_time": `${DatePickup.getMonth() + 1}/${DatePickup.getDate()}/${DatePickup.getFullYear()} ${TimePickup.getHours()}:${TimePickup.getMinutes()}`,
+      }
+
+      var price = await requestPrice(dataPrice);
+      this.setState({
+        price: price
+      })
+    }
+
+  }
+
+  onSetDateTime = (event, inst, name) => {
+    const time = inst.getVal();
+    this.setState({
+      [name]: time
+    })
+    console.log("date time", time, event.valueText, name)
   }
 
   handleSelectPaymenthod = (e) => {
@@ -41,8 +92,31 @@ class CompleteBooking extends React.Component {
     this.alertPayment.hide();
   }
 
+  onAfterComplete = () => {
+    this.props.history.push('/home')
+  }
+
   onConfirm = () => {
-    alert("request booking");
+    const { id, date_pickup, time_pickup } = this.state;
+    const DatePickup = new Date(date_pickup);
+    const TimePickup = new Date(time_pickup);
+
+    const dataComplete = {
+      "id": id,
+      "pick_up_time": `${DatePickup.getMonth() + 1}/${DatePickup.getDate()}/${DatePickup.getFullYear()} ${TimePickup.getHours()}:${TimePickup.getMinutes()}`,
+    }
+
+    console.log("dataBooking", dataComplete)
+
+    requestApi.postByToken(API.REQUEST_COMPLETE, dataComplete, (res) => {
+      console.log("Request complete booking", res)
+      if (res.code === 200) {
+        this.alertCompleteSuccess.show();
+      } else {
+        this.alertCompleteFalse.show();
+      }
+    })
+
     this.alert.hide()
   }
 
@@ -55,12 +129,32 @@ class CompleteBooking extends React.Component {
   }
 
   render() {
-
-    const {paymenthod} = this.state;
-    const textPaymenthod = PAYMENT_METHOD[PAYMENT_METHOD.findIndex( s => s.value == paymenthod )].label
+    const { paymenthod } = this.state;
+    const textPaymenthod = PAYMENT_METHOD[PAYMENT_METHOD.findIndex(s => s.value == paymenthod)].label
+    const DateTime = normalizeDateTime(this.state.time_dropoff);
 
     return (
       <div className="wrap-add-booking">
+        <WhaleloAlert
+          ref={instance => this.alertCompleteSuccess = instance}
+          header="Complete booking"
+          showCancel={false}
+          confirmText="OK"
+          onConfirm={() => {this.props.history.go(-1)}}
+        >
+          <span>Your booking was completed successfully!</span>
+        </WhaleloAlert>
+
+        <WhaleloAlert
+          ref={instance => this.alertCompleteFalse = instance}
+          header="Complete booking"
+          showCancel={false}
+          confirmText="OK"
+          onConfirm={() => {return}}
+        >
+          <span>Occured error when complete this booking</span>
+        </WhaleloAlert>
+
         <WhaleloAlert
           ref={instance => this.alert = instance}
           header="Complete booking"
@@ -87,14 +181,14 @@ class CompleteBooking extends React.Component {
               {
                 PAYMENT_METHOD.map((prop, key) => {
                   return (
-                    
-                      <FormControlLabel
-                        classes={{ label: "radio-btn-pay-label", root: "form-ctr-root " }}
-                        value={prop.value}
-                        control={<Radio color="secondary" classes={{ checked: "radio-btn-pay" }} />}
-                        label={prop.label}
-                        labelPlacement="start"
-                      />
+
+                    <FormControlLabel
+                      classes={{ label: "radio-btn-pay-label", root: "form-ctr-root " }}
+                      value={prop.value}
+                      control={<Radio color="secondary" classes={{ checked: "radio-btn-pay" }} />}
+                      label={prop.label}
+                      labelPlacement="start"
+                    />
                   )
                 })
               }
@@ -105,47 +199,55 @@ class CompleteBooking extends React.Component {
 
         <div className="booking-title">
           Complete booking
-          <span className="serial-order">#{123}</span>
+          <span className="serial-order">#{this.state.serial}</span>
         </div>
         <div className="form-data">
           <div>
             <span className="left-label">Email:</span>
-            <span className="right-label">vanbaubv@gmail.com </span>
+            <span className="right-label">{this.state.email}</span>
           </div>
           <hr />
 
           <div>
             <span className="left-label">Full name:</span>
-            <span className="right-label">Nguyen Van Bau</span>
+            <span className="right-label">{this.state.fullname}</span>
           </div>
           <hr />
 
           <div>
             <span className="left-label">Drop-off:</span>
-            <span className="right-label">20:00 19/12/2010</span>
+            <span className="right-label">{`${DateTime.time} - ${DateTime.date}`}</span>
           </div>
           <hr />
 
           <div>
             <span className="left-label">Number of charged items:</span>
-            <span className="right-label">4</span>
+            <span className="right-label">{this.state.item_count}</span>
           </div>
           <hr />
 
           <div className="wrap-date-time">
             <div className="date-booking" >
               <WhaleloInput
+                value={this.state.date_pickup}
                 selectAble={true}
-                name="date-pickup"
+                type="date"
+                name="date_pickup"
                 label="Date to pick up*"
+                onSet={this.onSetDateTime}
+
               />
             </div>
             <div className="empty"></div>
             <div className="time-booking">
               <WhaleloInput
+                value={this.state.time_pickup}
                 selectAble={true}
-                name="time-pickup"
+                type="time"
+                name="time_pickup"
                 label="Time to pick up*"
+                onSet={this.onSetDateTime}
+
               />
             </div>
           </div>
@@ -153,7 +255,7 @@ class CompleteBooking extends React.Component {
 
           <div>
             <span className="left-label">Total Amount:</span>
-            <span className="right-label">{vndStyle(700000)} đ - {15.5}$</span>
+            <span className="right-label">{vndStyle(this.state.price)} đ</span>
           </div>
           <hr />
 

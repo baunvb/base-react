@@ -264,78 +264,78 @@ class Chart extends React.Component {
         if (filter == "year") {
             postPre = "01/01/"
         }
-        requestApi.postByToken('salepoints/getAllPrice', { type_get: this.state.filter, number: this.state.number_price }, (res) => {
-            console.log("salepoints/getAllPrice", res);
-            if (res.data.data.length === 0 || res.message === false) {
-                return
-            }
-            res.data.data.map((prop, key) => {
-                self.setState((prevState, _) => ({
-                    labels2: [...prevState.labels2, filter == 'week' ? (postPre + prop.time.split(" ")[1]) : (postPre + prop.time)],
-                    data2: [...prevState.data2, prop.price],
-                    numberOfTrip2: [...prevState.numberOfTrip2, prop.number_trip]
-                }))
-            })
+        // requestApi.postByToken('salepoints/getAllPrice', { type_get: this.state.filter, number: this.state.number_price }, (res) => {
+        //     console.log("salepoints/getAllPrice", res);
+        //     if (res.data.data.length === 0 || res.message === false) {
+        //         return
+        //     }
+        //     res.data.data.map((prop, key) => {
+        //         self.setState((prevState, _) => ({
+        //             labels2: [...prevState.labels2, filter == 'week' ? (postPre + prop.time.split(" ")[1]) : (postPre + prop.time)],
+        //             data2: [...prevState.data2, prop.price],
+        //             numberOfTrip2: [...prevState.numberOfTrip2, prop.number_trip]
+        //         }))
+        //     })
 
-            // convert time format dd/mm/yyyy to mm/dd/yyyy
-            if (filter === "day" || filter === "year") {
-                var { labels2, data2, numberOfTrip2 } = self.state;
-                console.log("Full", labels2)
-                self.setState((prevState, _) => ({
-                    labels: [...prevState.labels, ...labels2],
-                    data: [...prevState.data, ...data2],
-                    numberOfTrip: [...prevState.numberOfTrip, ...numberOfTrip2],
-                }))
-            }
-            if (filter === "month") {
-                let labelsTemp = [];
-                self.state.labels2.map((element, key) => {
-                    let arr = element.split('/');
-                    let arr2 = arr[1] + "/" + arr[0] + "/" + arr[2]
-                    labelsTemp.push(arr2);
-                })
-                self.setState((prevState, _) => ({
-                    labels: [...prevState.labels, ...labelsTemp],
-                    data: [...prevState.data, ...prevState.data2],
-                    numberOfTrip: [...prevState.numberOfTrip, ...prevState.numberOfTrip2]
-                }))
-            }
+        //     // convert time format dd/mm/yyyy to mm/dd/yyyy
+        //     if (filter === "day" || filter === "year") {
+        //         var { labels2, data2, numberOfTrip2 } = self.state;
+        //         console.log("Full", labels2)
+        //         self.setState((prevState, _) => ({
+        //             labels: [...prevState.labels, ...labels2],
+        //             data: [...prevState.data, ...data2],
+        //             numberOfTrip: [...prevState.numberOfTrip, ...numberOfTrip2],
+        //         }))
+        //     }
+        //     if (filter === "month") {
+        //         let labelsTemp = [];
+        //         self.state.labels2.map((element, key) => {
+        //             let arr = element.split('/');
+        //             let arr2 = arr[1] + "/" + arr[0] + "/" + arr[2]
+        //             labelsTemp.push(arr2);
+        //         })
+        //         self.setState((prevState, _) => ({
+        //             labels: [...prevState.labels, ...labelsTemp],
+        //             data: [...prevState.data, ...prevState.data2],
+        //             numberOfTrip: [...prevState.numberOfTrip, ...prevState.numberOfTrip2]
+        //         }))
+        //     }
 
-            // đảo ngược mảng tại đây
-            if (filter === "week") {
-                let labelsTemp = [];
-                let { labels2, data2, numberOfTrip2 } = self.state;
-                labels2.forEach(element => {
-                    labelsTemp.push(self.getWeekByDate(element));
-                })
-                self.setState((prevState, _) => ({
-                    labelsOfWeek: [...labelsTemp.reverse(), ...prevState.labelsOfWeek],
-                    dataOfWeek: [...data2.reverse(), ...prevState.dataOfWeek],
-                    labels: [...prevState.labels, ...labels2.reverse()],
-                    numberOfTrip: [...numberOfTrip2.reverse(), ...prevState.numberOfTrip]
-                }))
-            }
+        //     // đảo ngược mảng tại đây
+        //     if (filter === "week") {
+        //         let labelsTemp = [];
+        //         let { labels2, data2, numberOfTrip2 } = self.state;
+        //         labels2.forEach(element => {
+        //             labelsTemp.push(self.getWeekByDate(element));
+        //         })
+        //         self.setState((prevState, _) => ({
+        //             labelsOfWeek: [...labelsTemp.reverse(), ...prevState.labelsOfWeek],
+        //             dataOfWeek: [...data2.reverse(), ...prevState.dataOfWeek],
+        //             labels: [...prevState.labels, ...labels2.reverse()],
+        //             numberOfTrip: [...numberOfTrip2.reverse(), ...prevState.numberOfTrip]
+        //         }))
+        //     }
 
-            if (filter === "year") {
-                let { labels, data, labels2, data2, numberOfTrip2, numberOfTrip } = self.state;
-                let labelTemp = [...labels, ...labels2.slice(0, 1)];
-                let dataTemp = [...data, ...data2.slice(0, 1)];
-                let numberOfTripTemp = [...numberOfTrip, ...numberOfTrip2.slice(0, 1)];
-                self.setState((prevState, _) => ({
-                    labels: labelTemp.slice(0, 1),
-                    data: dataTemp.slice(0, 1),
-                    numberOfTrip: numberOfTripTemp.slice(0, 1)
-                }))
-            }
+        //     if (filter === "year") {
+        //         let { labels, data, labels2, data2, numberOfTrip2, numberOfTrip } = self.state;
+        //         let labelTemp = [...labels, ...labels2.slice(0, 1)];
+        //         let dataTemp = [...data, ...data2.slice(0, 1)];
+        //         let numberOfTripTemp = [...numberOfTrip, ...numberOfTrip2.slice(0, 1)];
+        //         self.setState((prevState, _) => ({
+        //             labels: labelTemp.slice(0, 1),
+        //             data: dataTemp.slice(0, 1),
+        //             numberOfTrip: numberOfTripTemp.slice(0, 1)
+        //         }))
+        //     }
 
-            self.setState((prevState, _) => ({
-                currentDate: self.state.labels[0],
-                price: self.state.data[0],
-                chuyenxe: self.state.numberOfTrip[0]
-            }), () => {
-                self.getList(0);
-            })
-        });
+        //     self.setState((prevState, _) => ({
+        //         currentDate: self.state.labels[0],
+        //         price: self.state.data[0],
+        //         chuyenxe: self.state.numberOfTrip[0]
+        //     }), () => {
+        //         self.getList(0);
+        //     })
+        // });
     }
 
     onElementsClick = (index) => {

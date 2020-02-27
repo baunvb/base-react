@@ -19,17 +19,17 @@ const hist = createBrowserHistory();
 // Add the sessionReducer
 
 const validateSession = () => {
-//  return true;
- return sessionService.loadUser()
-    .then((value) => {
-      console.log("current user", value)
-      let token_id = value.token_id;
-      return axios.post(host + "checkToken", {}, {
-        headers: {
-          "access_token": token_id
-        }
-      }).then(res => res.data.message);
-    })
+  return true;
+  //  return sessionService.loadUser()
+  //     .then((value) => {
+  //       console.log("current user", value)
+  //       let token_id = value.token_id;
+  //       return axios.post(host + "checkToken", {}, {
+  //         headers: {
+  //           "access_token": token_id
+  //         }
+  //       }).then(res => res.data.message);
+  //     })
 }
 // Check token
 const options = { redirectPath: '', driver: 'COOKIES', validateSession };

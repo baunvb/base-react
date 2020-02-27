@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import * as requestApi from 'api/requestApi';
-import {validateEmail} from "common/function.jsx";
+import { sessionService } from "redux-react-session";
+
+import { validateEmail } from "common/function.jsx";
 import "./login.css";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as sessionActions from 'actions/sessionActions';
 import PropTypes from "prop-types";
 import { withRouter } from 'react-router-dom';
-import CustomAlert from "components/Alert/CustomAlert.jsx"
 import logo from 'assets/img/wlicon/whalelo.png'
 import iconShowPass from 'assets/img/wlicon/icon_show_pass.png'
-
+import axios from "axios";
+import { host } from "config/host";
 // material-ui components
 import withStyles from "material-ui/styles/withStyles";
-import TextField from '@material-ui/core/TextField';
 // material-ui-icon
 
 // core components
@@ -24,6 +25,7 @@ import loginPageStyle from "assets/jss/views/loginPageStyle.jsx";
 
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName } from '@material-ui/core/styles';
+import { API } from 'config/Constant.js'
 
 const generateClassName = createGenerateClassName({
     dangerouslyUseGlobalCSS: true,
@@ -38,7 +40,7 @@ class LoginPage extends Component {
             user: {
                 email: '',
                 password: '',
-                tokenFirebase: '123abcdefg0987'
+                // tokenFirebase: '123abcdefg0987'
             },
             invalidEmail: null,
             invalidPassword: null,
@@ -49,19 +51,28 @@ class LoginPage extends Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.onChange = this.onChange.bind(this);
     }
+
     componentWillMount() {
-        requestApi.postByToken("checkToken", {}, (res) => {
-            console.log("XXX", res);
-            if (res.message) {
-                this.props.history.push("/home");
-            }
-        })
-    }
-    componentDidMount() {
-       
+        //this.props.history.push("/home");
     }
 
-    onSubmit(history) {
+    // static getDerivedStateFromProps(props, state) {
+    //     // call api getinfo to check token
+    //     requestApi.postByToken(API.GET_INFO, {}, (res) => {
+    //         console.log(API.GET_INFO, res);
+    //         if(res.status !== RESPONSE_CODE.UNAUTHORIZED) {
+    //             console.log("XXX", res.data)
+    //             sessionService.saveUser({user: res.data})
+    //             props.history.push("/home");
+    //         }
+    //     })
+    // }
+
+    componentDidMount() {
+
+    }
+
+    async onSubmit(history) {
         const { user } = this.state;
         var isEmailValidate = validateEmail(user.email);
         if (!isEmailValidate) {
@@ -72,8 +83,28 @@ class LoginPage extends Component {
             this.setState({
                 invalidEmail: null
             })
-            const { login } = this.props.actions;
-            login(user, history);
+            // const { login } = this.props.actions;
+            // login(user, history);
+
+            try {
+                var responseLogin = await axios.post(`${host}${API.LOGIN}`, user);
+                console.log("responseLogin", responseLogin);
+                if (responseLogin.data.code === 200) {
+                    const token = responseLogin.data.data.token;
+                    sessionService.saveSession({ token })
+                        .then(() => {
+                            history.push('/home');
+                        }).catch(err => console.error(err));
+                }
+            } catch (err) {
+                console.log("responseLogin", err.response);
+                if (err.response.data.code === 400) {
+                    this.setState({
+                        invalidEmailOrPassword: (<span className="text-invalid">Email or password is invalid </span>)
+                    })
+                }
+            }
+
         }
 
     }
@@ -104,43 +135,6 @@ class LoginPage extends Component {
         })
     }
 
-    handleForgetPassword = () => {
-        console.log(this.state.editEmail);
-        var self = this;
-        requestApi.postRequest("salepoints/forgetPassword", { email: self.state.editEmail }, (res) => {
-            console.log("res", res)
-            self.handleClose();
-
-            if (res.message === true) {
-                //alert("Update password success, please check email");
-                this.setState({
-                    alert: <CustomAlert
-                        display={true}
-                        textAlign="center"
-                        onConfirmClick={e => this.destroyAlert()}
-                        title={null}
-                        content={
-                            <span><strong>Thay đổi mật khẩu không thành công. <br /></strong>Mật khẩu mới đã được gửi về email của bạn!</span>
-                        }
-                    />
-                })
-            } else {
-                this.setState({
-                    alert: <CustomAlert
-                        display={true}
-                        textAlign="center"
-                        onConfirmClick={e => this.destroyAlert()}
-                        title={null}
-                        content={
-                            <span>Thay đổi mật khẩu không thành công. <br /> Vui lòng thử lại!</span>
-                        }
-                    />
-                })
-            }
-        })
-    }
-
-
     onShowPass = () => {
         this.setState((prevState) => ({
             isShowPassword: !prevState.isShowPassword
@@ -159,9 +153,9 @@ class LoginPage extends Component {
         return (
 
             <JssProvider generateClassName={generateClassName}>
-                <div className={classes.content}>
+                <div>
                     {this.state.alert}
-                    <div classes="center-login" className={classes.container}>
+                    <div className="center-login">
                         <GridContainer justify="center">
                             <ItemGrid xs={12} sm={6} md={4}>
                                 <div className="wrap-img-login">
@@ -197,6 +191,11 @@ class LoginPage extends Component {
                                             }
 
                                         </div>
+
+                                        {
+                                            this.state.invalidEmailOrPassword
+                                        }
+
                                         <LoginButton />
 
                                     </div>

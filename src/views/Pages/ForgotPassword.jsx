@@ -39,16 +39,6 @@ class ForgotPassword extends Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.onChange = this.onChange.bind(this);
     }
-    componentWillMount() {
-        requestApi.postByToken("checkToken", {}, (res) => {
-            console.log("XXX", res);
-            if (res.message) {
-                this.props.history.push("/home");
-            }
-        })
-    }
-
-
 
     onSubmit(history) {
         const { email } = this.state;
@@ -129,9 +119,9 @@ class ForgotPassword extends Component {
         return (
 
             <JssProvider generateClassName={generateClassName}>
-                <div className={classes.content}>
+                <div>
                     {this.state.alert}
-                    <div classes="center-login" className={classes.container}>
+                    <div className="center-login">
                         <GridContainer justify="center">
                             <ItemGrid xs={12} sm={6} md={4}>
                                 <div className="wrap-img-login">

@@ -4,35 +4,44 @@ import MainStationMng from "views/Station/MainStationMng.jsx"
 import AddNewBooking from "views/Booking/AddNewBooking.jsx";
 import CompleteBooking from "views/Booking/CompleteBooking";
 import ComfirmUserBooking from "views/Booking/ComfirmUserBooking";
+import DetailBooking from "views/Booking/DetailBooking";
+
 import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
 import UserProfile from "views/Profile/UserProfile.jsx"
 var dashRoutes = [
   {
     path: "/home",
-    name: "Storage",
+    name: "Luggage Storage",
     icon: WorkOutlineIcon,
     component: MainStationMng
   },
   {
     hide: true,
     path: "/addNewAppoinment",
-    name: "Storage",
-    icon: Timeline,
+    name: "",
+    icon: null,
     component: AddNewBooking
   },
   {
     hide: true,
     path: "/completebooking",
-    name: "Luggage Storage",
-    icon: Timeline,
+    name: "",
+    icon: null,
     component: CompleteBooking
   },
   {
     hide: true,
     path: "/confirmbooking",
-    name: "Storage",
-    icon: Timeline,
+    name: "",
+    icon: null,
     component: ComfirmUserBooking
+  },
+  {
+    hide: true,
+    path: "/bookingdetail",
+    name: "",
+    icon: null,
+    component: DetailBooking
   },
   {
     path: "/dashboard",

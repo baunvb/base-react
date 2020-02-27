@@ -18,18 +18,27 @@ class AppointmentMng extends React.Component {
   }
 
   render() {
+    const { bookingList } = this.props;
+    console.log("bookingList", bookingList);
     return (
       <div>
+
         <SearchComponent />
-        <ItemOrder
-          type={STORAGE_STATUS.APPOINTMENT}
-          {...this.props} />
-        <ItemOrder
-          type={STORAGE_STATUS.APPOINTMENT}
-          {...this.props} />
-        <ItemOrder
-          type={STORAGE_STATUS.APPOINTMENT}
-          {...this.props} />
+        {
+          bookingList.map((item, key) => {
+            return (
+              <ItemOrder
+                item={item}
+                key={key}
+                type={STORAGE_STATUS.APPOINTMENT}
+                {...this.props}
+              />
+            )
+          }
+          )
+        }
+
+
         <div className="wrap-icon-add"
           onClick={e => this.props.history.push('/addNewAppoinment')}
         >

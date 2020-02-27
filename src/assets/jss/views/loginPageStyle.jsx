@@ -6,8 +6,7 @@ import { container } from "assets/jss/material-dashboard-pro-react.jsx";
 
 const loginPageStyle = {
   content: {
-    paddingTop: "18vh",
-    minHeight: "calc(100vh - 80px)",
+    height: "100%",
     position: "relative",
     zIndex: "4"
   },

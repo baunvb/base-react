@@ -21,7 +21,7 @@ import avatar from "assets/img/faces/avatar.png";
 // core components
 import sidebarStyle from "assets/jss/components/sidebarStyle.jsx";
 
-import { host, salepoint } from "../../config/host";
+import { host } from "../../config/host";
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName } from '@material-ui/core/styles';
 const generateClassName = createGenerateClassName({
@@ -67,7 +67,14 @@ class Sidebar extends React.Component {
       userName: "",
       avatar: "",
       email: "",
-      miniActive: true
+      miniActive: true,
+      profile: {
+        "email": "",
+        "password": "",
+        "name": "",
+        "phone_number": "",
+        "address": "",
+    }
     };
     this.activeRoute.bind(this);
   }
@@ -85,16 +92,8 @@ class Sidebar extends React.Component {
   componentDidMount() {
     let self = this;
     sessionService.loadUser().then((value) => {
-      var avatarUser;
-      if (value.avatar === "" || value.avatar === undefined) {
-        avatarUser = avatar;
-      } else {
-        avatarUser = host + salepoint + value.avatar;
-      }
       self.setState({
-        userName: value.name,
-        email: value.email,
-        avatar: avatarUser
+        profile: value.user.station,
       })
     })
       .catch((err) => {
@@ -144,7 +143,7 @@ class Sidebar extends React.Component {
               <img src={IconWL} onError={this.onErrorAvatar} />
 
               <ListItemText
-                primary={this.state.userName}
+                primary={this.state.profile.name}
                 disableTypography={true}
                 className={itemText + " " + classes.userItemText}
               />

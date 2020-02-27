@@ -41,11 +41,19 @@ class WhaleloAlert extends React.Component {
             </div>
 
             {
-              showCancel && <button className="btn-cancel" onClick={() => onCacel()}>
+              showCancel && <button className="btn-cancel" onClick={() => {
+                this.hide()
+                onCacel()
+              }}>
                 {cancelText}
               </button>
             }
-            <button className="btn-login" onClick={() => onConfirm()}>
+            <button className="btn-login" onClick={() => {
+              this.setState({
+                isShow: false
+              })
+              onConfirm()
+            }}>
               {confirmText}
             </button>
           </div>

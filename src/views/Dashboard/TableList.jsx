@@ -150,11 +150,11 @@ export default class TableList extends React.PureComponent {
 
         start = start + pos_start;
         end = end + pos_end;
-        this.setState((prevState, _) => ({
-            start: start,
-            end: end,
-            list: []
-        }), () => this.fetchData())
+        // this.setState((prevState, _) => ({
+        //     start: start,
+        //     end: end,
+        //     list: []
+        // }), () => this.fetchData())
     }
 
     fetchData = () => {
@@ -246,7 +246,7 @@ export default class TableList extends React.PureComponent {
         this.setState((prevState, _) => ({
             loading: !prevState.loading
         }))
-        this.fetchData();
+        //this.fetchData();
     }
 
     render() {

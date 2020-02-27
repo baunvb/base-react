@@ -9,11 +9,19 @@ import { sessionService } from 'redux-react-session';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
 import WhaleloInput from 'components/CustomInput/WhaleloInput.jsx'
 import InputPassword from 'views/Profile/InputPassword.jsx'
+import { API } from 'config/Constant.js'
+
 class UserProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            profile: {
+                "email": "",
+                "password": "",
+                "name": "",
+                "phone_number": "",
+                "address": "",
+            }
         }
 
     }
@@ -28,26 +36,24 @@ class UserProfile extends React.Component {
 
     onConfirmUpdatePassword = () => {
         this.onUpdatePassword()
-        this.alertChangePass.hide()
     }
 
     onConfirmUpdateProfile = () => {
         this.onUpdateProfile()
-        this.alertChangePass.hide()
-
     }
 
     onUpdatePassword = () => {
         const { old_password, new_password, confirm_new_password } = this.state;
         console.log(old_password, new_password, confirm_new_password);
-        this.alertChangePass.hide()
 
     }
 
     onUpdateProfile = () => {
-        const {name, phoneNumber} = this.state;
-        console.log(name, phoneNumber)
-        this.alertEditProfile.hide()
+        const { edit_name, edit_phoneNumber } = this.state;
+        console.log(edit_name, edit_phoneNumber)
+        requestApi.postByToken(API.UPDATE_INFO, {name: edit_name, phone_number: edit_phoneNumber}, (res) => {
+            console.log(API.UPDATE_INFO, res)
+        })
 
     }
 
@@ -58,14 +64,21 @@ class UserProfile extends React.Component {
     }
 
     logout = async () => {
-        await requestApi.postByToken("salepoints/signout", {}, (res) => { });
+        // await requestApi.postByToken("salepoints/signout", {}, (res) => { });
         sessionService.deleteSession();
         sessionService.deleteUser();
         this.props.history.push('/login')
     }
 
     componentDidMount() {
-
+        sessionService.loadUser().then(user => {
+            console.log("loadUser", user)
+            this.setState({
+                profile: user.user.station,
+                edit_name: user.user.station.name,
+                edit_phoneNumber: user.user.station.phone_number
+            })
+        })
     }
 
     onInputPassword = (e) => {
@@ -77,9 +90,9 @@ class UserProfile extends React.Component {
     onInput = (e) => {
         const { value, name } = e.target;
         this.setState({
-          [name]: value
+            [name]: value
         });
-      }
+    }
 
     render() {
         return (
@@ -93,13 +106,15 @@ class UserProfile extends React.Component {
                     onConfirm={this.onConfirmUpdateProfile}
                 >
                     <WhaleloInput
-                        name="name"
+                        name="edit_name"
                         label="Full name"
+                        value={this.state.edit_name}
                         onChange={this.onInput}
                     />
                     <WhaleloInput
-                        name="phoneNumber"
+                        name="edit_phoneNumber"
                         label="Phone number"
+                        value={this.state.edit_phoneNumber}
                         onChange={this.onInput}
 
                     />
@@ -134,8 +149,8 @@ class UserProfile extends React.Component {
                         <img className="img-avatar" src={DefaultAvatar} />
                         <img className="avatar-border" src={AvatarBorder} />
                     </div>
-                    <span className="username">Nguyen van bau</span>
-                    <span className="email">baunvh@gmail.com</span>
+                    <span className="username">{this.state.profile.name}</span>
+                    <span className="email">{this.state.profile.email}</span>
                 </div>
                 <hr />
 
@@ -158,6 +173,7 @@ class UserProfile extends React.Component {
                     <div className="profile-edit" onClick={(e) => this.logout()}>
                         <span className="logout">Logout</span>
                     </div>
+                    
                 </div>
             </div>
         )

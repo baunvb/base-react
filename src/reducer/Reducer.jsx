@@ -1,22 +1,39 @@
 import { combineReducers } from 'redux'
 import { sessionReducer } from 'redux-react-session';
-
+import { STORAGE_ACTION } from 'actions/StorageActions.js'
 var currentState = {
-
+  bookingList: [],
+  confirmList: [],
+  completeList: []
 }
 
-function bookingReducer(state = currentState, action) {
-    return {}
-}
+function StorageReducer(state = currentState, action) {
+  console.log("REDUCER", action)
+  switch (action.type) {
+    case STORAGE_ACTION.BOOKING_LIST:
+      return {
+        ...state,
+        bookingList: action.data,
+      }
+    case STORAGE_ACTION.CONFIRM_LIST:
+      return {
+        ...state,
+        confirmList: action.data,
+      }
+    case STORAGE_ACTION.COMPLETE_LIST:
+      return {
+        ...state,
+        completeList: action.data,
+      }
+    default:
+      return { ...state }
+  }
 
-function houseReducer(state = { listHouse: [] }, action) {
-  return Object.assign({}, state, { [action.type]: action.text })
 }
 
 const myReducer = combineReducers({
   session: sessionReducer,
-  booking: bookingReducer,
-  house: houseReducer
+  storage: StorageReducer,
 })
 
 export default myReducer

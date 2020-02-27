@@ -6,7 +6,8 @@ import Grid from "material-ui/Grid";
 
 const style = {
   grid: {
-    width: "100% + 30px)"
+    width: "100%",
+    margin: 0
   }
 };
 
