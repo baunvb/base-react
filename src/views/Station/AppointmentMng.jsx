@@ -8,11 +8,15 @@ class AppointmentMng extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      searchStr: ""
     }
 
   }
-
+  onSearch = (e) => {
+    this.setState({
+      searchStr: e.target.value
+    })
+  }
   componentDidMount() {
 
   }
@@ -23,9 +27,12 @@ class AppointmentMng extends React.Component {
     return (
       <div>
 
-        <SearchComponent />
+        <SearchComponent 
+          onSearch = {this.onSearch}
+        />
         {
           bookingList.map((item, key) => {
+            if(item.guest_name.toLowerCase().includes(this.state.searchStr.toLowerCase()))
             return (
               <ItemOrder
                 item={item}

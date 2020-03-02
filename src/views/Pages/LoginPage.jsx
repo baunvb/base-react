@@ -25,7 +25,7 @@ import loginPageStyle from "assets/jss/views/loginPageStyle.jsx";
 
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName } from '@material-ui/core/styles';
-import { API } from 'config/Constant.js'
+import { API, RESPONSE_CODE } from 'config/Constant.js'
 
 const generateClassName = createGenerateClassName({
     dangerouslyUseGlobalCSS: true,
@@ -53,20 +53,8 @@ class LoginPage extends Component {
     }
 
     componentWillMount() {
-        //this.props.history.push("/home");
-    }
 
-    // static getDerivedStateFromProps(props, state) {
-    //     // call api getinfo to check token
-    //     requestApi.postByToken(API.GET_INFO, {}, (res) => {
-    //         console.log(API.GET_INFO, res);
-    //         if(res.status !== RESPONSE_CODE.UNAUTHORIZED) {
-    //             console.log("XXX", res.data)
-    //             sessionService.saveUser({user: res.data})
-    //             props.history.push("/home");
-    //         }
-    //     })
-    // }
+    }
 
     componentDidMount() {
 
@@ -90,10 +78,16 @@ class LoginPage extends Component {
                 var responseLogin = await axios.post(`${host}${API.LOGIN}`, user);
                 console.log("responseLogin", responseLogin);
                 if (responseLogin.data.code === 200) {
-                    const token = responseLogin.data.data.token;
+                    const token = responseLogin.data.data.station.token;
+                    console.log("ON LOGIN", token)
                     sessionService.saveSession({ token })
                         .then(() => {
-                            history.push('/home');
+                            sessionService.saveUser({user: responseLogin.data.data.station})
+                                .then(() => {
+                                    history.push('/home');
+                                }).catch(err => console.error(err));
+
+                            //history.push('/home');
                         }).catch(err => console.error(err));
                 }
             } catch (err) {
@@ -152,10 +146,10 @@ class LoginPage extends Component {
         ));
         return (
 
-            <JssProvider generateClassName={generateClassName}>
-                <div>
-                    {this.state.alert}
-                    <div className="center-login">
+            <div className="center-page">
+                {this.state.alert}
+                <div className="center-login">
+                    <div>
                         <GridContainer justify="center">
                             <ItemGrid xs={12} sm={6} md={4}>
                                 <div className="wrap-img-login">
@@ -207,7 +201,7 @@ class LoginPage extends Component {
                         </GridContainer>
                     </div>
                 </div>
-            </JssProvider>
+            </div>
 
         );
 

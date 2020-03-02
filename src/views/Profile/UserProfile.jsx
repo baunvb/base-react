@@ -15,6 +15,7 @@ class UserProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            err: null,
             profile: {
                 "email": "",
                 "password": "",
@@ -44,15 +45,38 @@ class UserProfile extends React.Component {
 
     onUpdatePassword = () => {
         const { old_password, new_password, confirm_new_password } = this.state;
-        console.log(old_password, new_password, confirm_new_password);
+        if (new_password !== confirm_new_password) {
+            this.setState({
+                err: <span className="text-invalid">New password isn't match</span>
+            })
+        } else {
+            this.setState({
+                err: null
+            })
+            requestApi.postByToken(API.CHANGE_PASSWORD, { old_password: old_password, new_password: new_password }, (res) => {
+                if (res.code === 200) {
+                    this.updatePassSuccess.show()
+                } else {
+                    this.updatePassFalse.show()
+                }
+            })
+        }
 
     }
 
     onUpdateProfile = () => {
         const { edit_name, edit_phoneNumber } = this.state;
+        console.log("XXXX", { ...this.state.user, name: edit_name })
         console.log(edit_name, edit_phoneNumber)
-        requestApi.postByToken(API.UPDATE_INFO, {name: edit_name, phone_number: edit_phoneNumber}, (res) => {
-            console.log(API.UPDATE_INFO, res)
+        requestApi.postByToken(API.UPDATE_INFO, { name: edit_name, phone_number: edit_phoneNumber }, (res) => {
+            if (res.code === 200) {
+                sessionService.saveUser({ user: { ...this.state.user, name: edit_name, phone_number: edit_phoneNumber } })
+                    .then(() => {
+                    }).catch(err => console.error(err));
+                this.updateProfileSuccess.show()
+            } else {
+                this.updateProfileFalse.show()
+            }
         })
 
     }
@@ -71,12 +95,13 @@ class UserProfile extends React.Component {
     }
 
     componentDidMount() {
-        sessionService.loadUser().then(user => {
-            console.log("loadUser", user)
+        sessionService.loadUser().then(value => {
+            console.log("loadUser", value)
             this.setState({
-                profile: user.user.station,
-                edit_name: user.user.station.name,
-                edit_phoneNumber: user.user.station.phone_number
+                user: value.user,
+                profile: value.user,
+                edit_name: value.user.name,
+                edit_phoneNumber: value.user.phone_number
             })
         })
     }
@@ -97,6 +122,42 @@ class UserProfile extends React.Component {
     render() {
         return (
             <div className="main-profile">
+                <WhaleloAlert
+                    ref={instance => this.updatePassSuccess = instance}
+                    header="Change password"
+                    confirmText="OK"
+                    showCancel={false}
+                    onConfirm={() => { return }}
+                >
+                    <span>Update password successfully!</span>
+                </WhaleloAlert>
+                <WhaleloAlert
+                    ref={instance => this.updatePassFalse = instance}
+                    header="Change password"
+                    confirmText="OK"
+                    showCancel={false}
+                    onConfirm={() => { return }}
+                >
+                    <span>Occurs an error when update password. Please try again!</span>
+                </WhaleloAlert>
+                <WhaleloAlert
+                    ref={instance => this.updateProfileSuccess = instance}
+                    header="Edit profile"
+                    confirmText="OK"
+                    showCancel={false}
+                    onConfirm={() => { return }}
+                >
+                    <span>Update profile successfully!</span>
+                </WhaleloAlert>
+                <WhaleloAlert
+                    ref={instance => this.updateProfileFalse = instance}
+                    header="Edit profile"
+                    confirmText="OK"
+                    showCancel={false}
+                    onConfirm={() => { return }}
+                >
+                    <span>Occurs an error when update profile. Please try again!</span>
+                </WhaleloAlert>
                 <WhaleloAlert
                     ref={instance => this.alertEditProfile = instance}
                     header="Edit profile"
@@ -122,7 +183,7 @@ class UserProfile extends React.Component {
 
                 <WhaleloAlert
                     ref={instance => this.alertChangePass = instance}
-                    header="Edit profile"
+                    header="Change password"
                     confirmText="Accept"
                     cancelText="Cancel"
                     onCacel={this.onCancel}
@@ -141,7 +202,7 @@ class UserProfile extends React.Component {
                     <InputPassword name="confirm_new_password"
                         onChange={this.onInputPassword}
                     />
-
+                    {this.state.err}
                 </WhaleloAlert>
 
                 <div className="top-info">
@@ -173,7 +234,7 @@ class UserProfile extends React.Component {
                     <div className="profile-edit" onClick={(e) => this.logout()}>
                         <span className="logout">Logout</span>
                     </div>
-                    
+
                 </div>
             </div>
         )

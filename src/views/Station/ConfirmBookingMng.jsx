@@ -8,7 +8,7 @@ class ConfirmBookingMng extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      searchStr: ""
     }
 
   }
@@ -17,22 +17,31 @@ class ConfirmBookingMng extends React.Component {
 
   }
 
+  onSearch = (e) => {
+    this.setState({
+      searchStr: e.target.value
+    })
+  }
+
   render() {
     const { confirmList } = this.props;
 
     return (
       <div>
-        <SearchComponent />
+        <SearchComponent 
+          onSearch = {this.onSearch}
+        />
         {
           confirmList.map((item, key) => {
-            return (
-              <ItemOrder
-                item={item}
-                key={key}
-                type={STORAGE_STATUS.CONFIRM}
-                {...this.props}
-              />
-            )
+            if(item.guest_name.toLowerCase().includes(this.state.searchStr.toLowerCase()))
+              return (
+                <ItemOrder
+                  item={item}
+                  key={key}
+                  type={STORAGE_STATUS.CONFIRM}
+                  {...this.props}
+                />
+              )
           }
           )
         }

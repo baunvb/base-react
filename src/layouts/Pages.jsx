@@ -12,28 +12,27 @@ class Pages extends React.Component {
 
   render() {
     return (
-      <div>
-            <Switch>
-              {pagesRoutes.map((prop, key) => {
-                if (prop.collapse) {
-                  return null;
-                }
-                if (prop.redirect) {
-                  return (
-                    <Redirect from={prop.path} to={prop.pathTo} key={key} />
-                  );
-                }
-                return (
-                  <Route
-                    path={prop.path}
-                    component={prop.component}
-                    key={key}
-                  />
-                );
-              })}
-            </Switch>
-           
-      </div>
+
+      <Switch>
+        {pagesRoutes.map((prop, key) => {
+          if (prop.collapse) {
+            return null;
+          }
+          if (prop.redirect) {
+            return (
+              <Redirect from={prop.path} to={prop.pathTo} key={key} />
+            );
+          }
+          return (
+            <Route
+              path={prop.path}
+              component={prop.component}
+              key={key}
+            />
+          );
+        })}
+      </Switch>
+
     );
   }
 }

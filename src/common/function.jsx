@@ -2,9 +2,10 @@
 import { API } from 'config/Constant';
 import axios from "axios";
 import { host } from "config/host";
+import { sessionService, sessionReducer } from 'redux-react-session';
 
 export const vndStyle = (vnd) => {
-    if(vnd === undefined || vnd === ""){
+    if (vnd === undefined || vnd === "" || vnd === null) {
         return 0;
     }
     return vnd.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -20,8 +21,8 @@ export const vndRound = (vnd) => {
 }
 
 export const isValidateArray = (arr) => {
-    for(let i = 0; i < arr.length; i++){
-        if(arr[i] === "" || arr[i] === undefined || arr[i] === 0){
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === "" || arr[i] === undefined || arr[i] === 0) {
             return false
         }
     }
@@ -29,7 +30,7 @@ export const isValidateArray = (arr) => {
 }
 
 export const normalizeDate = (date) => {
-    if(date === "" || date === undefined){
+    if (date === "" || date === undefined) {
         return ""
     }
     const arr = date.split("/");
@@ -72,6 +73,35 @@ export const normalizeDateTime = time => {
 
 export const requestPrice = async (data) => {
     var response = await axios.post(host.concat(API.REQUEST_PRICE), data);
-    console.log(response)
-    return (response.data.code === 200) ?  response.data.data.price :  0
+    console.log("DATA", data);
+    console.log("REQUEST PRICE", response);
+    return (response.data.code === 200) ? response.data.data.price : 0
+}
+
+export const validateSession = () => {
+    //return true;
+    return sessionService.loadSession()
+        .then((value) => {
+            console.log("current user", value)
+            let token_id = value.token;
+            return axios.post(host + "station/checktoken", {}, {
+                headers: {
+                    "authorization": "Bearer " + token_id
+                }
+            }).then(res => res.data.code === 200);
+        })
+}
+
+export const checkPickupTimeValid = (date_dropoff, time_dropoff, date_pickup, time_pickup) => {
+    const DateDropoff = new Date(date_dropoff);
+    const TimeDropoff = new Date(time_dropoff);
+    const DatePickup = new Date(date_pickup);
+    const TimePickup = new Date(time_pickup);
+
+    const drop_off_time = `${DateDropoff.getMonth() + 1}/${DateDropoff.getDate()}/${DateDropoff.getFullYear()} ${TimeDropoff.getHours()}:${TimeDropoff.getMinutes()}`;
+    const pick_up_time = `${DatePickup.getMonth() + 1}/${DatePickup.getDate()}/${DatePickup.getFullYear()} ${TimePickup.getHours()}:${TimePickup.getMinutes()}`;
+
+    const DateTimeDropoff = new Date(drop_off_time);
+    const DateTimePickup = new Date(pick_up_time);
+    return (DateTimePickup.getTime() - DateTimeDropoff) >= (1 * 60 * 60 * 1000)
 }

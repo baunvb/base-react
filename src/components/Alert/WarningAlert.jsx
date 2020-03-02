@@ -1,36 +1,41 @@
 import React from 'react';
 import 'components/Alert/whaleloalert.css';
-class WhaleloAlert extends React.Component {
+class WarningAlert extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShow: false
+      show: false,
+      content: null,
     }
 
+  }
+  updateState = (key, value) => {
+    this.setState({
+      [key]: value
+    })
   }
 
   componentDidMount() {
 
   }
 
-
   show = () => {
     this.setState({
-      isShow: true
+      show: true
     })
   }
 
   hide = () => {
     this.setState({
-      isShow: false
+      show: false
     })
   }
 
   render() {
-    const { confirmText, cancelText, children, header, onConfirm, onCacel, showCancel } = this.props;
-    const { isShow } = this.state;
+    const { children, header, confirmText} = this.props;
+    const { show,content } = this.state;
     return (
-      isShow && <div className="over-alert">
+      show && <div className="over-alert">
         <div className="whalelo-alert">
           <div className="header-alert">
             {header}
@@ -38,22 +43,12 @@ class WhaleloAlert extends React.Component {
 
           <div className="body-alert">
             <div className="alert-content">
-              {children}
+              {content}
             </div>
-
-            {
-              showCancel && <button className="btn-cancel" onClick={() => {
-                this.hide()
-                onCacel()
-              }}>
-                {cancelText}
-              </button>
-            }
             <button className="btn-login" onClick={() => {
               this.setState({
-                isShow: false
+                show: false
               })
-              onConfirm()
             }}>
               {confirmText}
             </button>
@@ -64,7 +59,10 @@ class WhaleloAlert extends React.Component {
   }
 
 }
-WhaleloAlert.defaultProps = {
-  showCancel: true
+
+WarningAlert.defaultProps = {
+  header: "Warning",
+  confirmText: "OK"
 }
-export default WhaleloAlert
+
+export default WarningAlert

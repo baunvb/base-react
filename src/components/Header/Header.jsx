@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
-
+import './header.css'
 // material-ui components
 import withStyles from "material-ui/styles/withStyles";
 import AppBar from "material-ui/AppBar";
@@ -19,7 +19,7 @@ import ViewList from "material-ui-icons/ViewList";
 import CustomIconButton from "components/CustomButtons/IconButton.jsx";
 
 import headerStyle from "assets/jss/components/headerStyle.jsx";
-
+import ToolbarIcon from "assets/img/wlicon/logo_toolbar.svg"
 function Header({ ...props }) {
   function makeBrand() {
     var name;
@@ -80,6 +80,9 @@ function Header({ ...props }) {
           >
             <Menu />
           </IconButton>
+          <div className="wrap-logo">
+              <img className="icon-toolbar" src={ToolbarIcon} />
+          </div>
         </Hidden>
       </Toolbar>
     </AppBar>

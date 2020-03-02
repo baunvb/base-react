@@ -13,9 +13,13 @@ import { API } from 'config/Constant.js'
 import * as requestApi from 'api/requestApi.js';
 import { connect } from "react-redux";
 import { STORAGE_ACTION } from 'actions/StorageActions.js'
-import GridContainer from "components/Grid/GridContainer.jsx";
-import ItemGrid from "components/Grid/ItemGrid.jsx";
+import { createGenerateClassName } from '@material-ui/core/styles';
+import JssProvider from 'react-jss/lib/JssProvider';
 
+const generateClassName = createGenerateClassName({
+  //dangerouslyUseGlobalCSS: true,
+  productionPrefix: 'dashboard',
+});
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -91,7 +95,11 @@ class MainStationMng extends React.Component {
     const { value } = this.state;
 
     return (
-          <div className="wrap-tab">
+      <JssProvider generateClassName={generateClassName}>
+
+        <div className="wrap-tab">
+          <JssProvider generateClassName={generateClassName}>
+
             <AppBar position="static" color="#FFFFFF" classes={{ root: "app-bar" }}>
               <Tabs
                 classes={{ indicator: "tab-indicator", flexContainer: "tabs-flexContainer " }}
@@ -107,21 +115,33 @@ class MainStationMng extends React.Component {
                 <Tab classes={{ selected: "tab-selected", root: "tab-root" }} label="Completion" {...a11yProps(2)} />
               </Tabs>
             </AppBar>
+          </JssProvider>
+          <JssProvider generateClassName={generateClassName}>
+
             <TabPanel value={value} index={0}>
               <div className="main-station">
                 <AppointmentMng {...this.props} />
               </div>
 
             </TabPanel>
+          </JssProvider>
+          <JssProvider generateClassName={generateClassName}>
+
             <TabPanel value={value} index={1}>
               <div className="main-station">
                 <ConfirmBookingMng {...this.props} />
               </div>
             </TabPanel>
+          </JssProvider>
+          <JssProvider generateClassName={generateClassName}>
+
             <TabPanel value={value} index={2}>
               <CompleteBookingMng {...this.props} />
             </TabPanel>
-          </div>
+          </JssProvider>
+
+        </div>
+      </JssProvider>
 
 
     );

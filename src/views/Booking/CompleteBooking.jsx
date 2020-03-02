@@ -10,9 +10,13 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
-import { vndStyle, normalizeDateTime, requestPrice } from 'common/function.jsx';
+import WarningAlert from 'components/Alert/WarningAlert.jsx'
+
+import { vndStyle, normalizeDateTime, requestPrice, checkPickupTimeValid } from 'common/function.jsx';
 import * as requestApi from 'api/requestApi';
 import { API } from 'config/Constant';
+import { BASE_URL_IMG } from 'config/host.js';
+import ImageViewer from '../../components/ImageViewer/ImageViewer';
 
 const PAYMENT_METHOD = [
   { value: "cash", label: "Pay by cash" },
@@ -30,15 +34,16 @@ class CompleteBooking extends React.Component {
     }
     console.log("Data", data)
     this.state = {
-      "id": data.id,
-      "serial": data.serial,
-      "email": data.email,
-      "time_dropoff": new Date(data.drop_off_time),
-      "date_dropoff": new Date(data.drop_off_time),
-      "time_pickup": new Date(data.pick_up_time),
-      "date_pickup": new Date(data.pick_up_time),
-      "item_count": data.package_total,
+      id: data.id,
+      serial: data.serial,
+      email: data.email,
+      time_dropoff: new Date(data.drop_off_time),
+      date_dropoff: new Date(data.drop_off_time),
+      time_pickup: new Date(data.pick_up_time),
+      date_pickup: new Date(data.pick_up_time),
+      item_count: data.package_total,
       fullname: data.guest_name,
+      imagePreviewUrl: data.images !== undefined ? data.images : [],
       price: data.price,
       paymenthod: PAYMENT_METHOD[0].value,
       resultBookingAlert: null
@@ -59,10 +64,18 @@ class CompleteBooking extends React.Component {
       const DatePickup = new Date(date_pickup);
       const TimePickup = new Date(time_pickup);
 
+      const drop_off_time = `${DateDropoff.getMonth() + 1}/${DateDropoff.getDate()}/${DateDropoff.getFullYear()} ${TimeDropoff.getHours()}:${TimeDropoff.getMinutes()}`;
+      const pick_up_time = `${DatePickup.getMonth() + 1}/${DatePickup.getDate()}/${DatePickup.getFullYear()} ${TimePickup.getHours()}:${TimePickup.getMinutes()}`;
+      const isValidTimeRange = checkPickupTimeValid(date_dropoff, time_dropoff, date_pickup, time_pickup)
+      if (!isValidTimeRange) {
+        this.warningAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
+        this.warningAlert.show();
+        return;
+      }
       const dataPrice = {
-        "drop_off_time": `${DateDropoff.getMonth() + 1}/${DateDropoff.getDate()}/${DateDropoff.getFullYear()} ${TimeDropoff.getHours()}:${TimeDropoff.getMinutes()}`,
+        "drop_off_time": drop_off_time,
         "package_total": parseInt(item_count),
-        "pick_up_time": `${DatePickup.getMonth() + 1}/${DatePickup.getDate()}/${DatePickup.getFullYear()} ${TimePickup.getHours()}:${TimePickup.getMinutes()}`,
+        "pick_up_time": pick_up_time,
       }
 
       var price = await requestPrice(dataPrice);
@@ -128,6 +141,11 @@ class CompleteBooking extends React.Component {
     this.alert.show()
   }
 
+  openImage = (src) => {
+    this.imageViewer.update("show", true)
+    this.imageViewer.update("src", src)
+  }
+
   render() {
     const { paymenthod } = this.state;
     const textPaymenthod = PAYMENT_METHOD[PAYMENT_METHOD.findIndex(s => s.value == paymenthod)].label
@@ -135,12 +153,18 @@ class CompleteBooking extends React.Component {
 
     return (
       <div className="wrap-add-booking">
+        <WarningAlert
+          ref={instance => this.warningAlert = instance}
+        />
+        <ImageViewer
+          ref={instance => this.imageViewer = instance}
+        />
         <WhaleloAlert
           ref={instance => this.alertCompleteSuccess = instance}
           header="Complete booking"
           showCancel={false}
           confirmText="OK"
-          onConfirm={() => {this.props.history.go(-1)}}
+          onConfirm={() => { this.props.history.go(-1) }}
         >
           <span>Your booking was completed successfully!</span>
         </WhaleloAlert>
@@ -150,7 +174,7 @@ class CompleteBooking extends React.Component {
           header="Complete booking"
           showCancel={false}
           confirmText="OK"
-          onConfirm={() => {return}}
+          onConfirm={() => { return }}
         >
           <span>Occured error when complete this booking</span>
         </WhaleloAlert>
@@ -260,18 +284,15 @@ class CompleteBooking extends React.Component {
           <hr />
 
           <div>
-            <span className="left-label">Luggage Photos:</span>
+            <span className="left-label">Luggage Photos:({this.state.imagePreviewUrl.length})</span>
             <div className="list-imgs">
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
+              {
+                this.state.imagePreviewUrl.map((item, key) => {
+                  return (
+                    <img className='item-img' src={BASE_URL_IMG + item} onClick={e => this.openImage(BASE_URL_IMG + item)} />
+                  )
+                })
+              }
             </div>
           </div>
           <hr />

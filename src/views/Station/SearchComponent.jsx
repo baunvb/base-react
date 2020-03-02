@@ -21,6 +21,7 @@ class SearchComponent extends React.Component {
     this.setState({
       [e.target.name]: e.target.value
     })
+    this.props.onSearch(e)
   }
 
   render(){

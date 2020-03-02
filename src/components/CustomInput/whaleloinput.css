@@ -1,7 +1,6 @@
 .icon-select {
   position: absolute;
   right: 8px;
-  z-index: 2;
 }
 
 .wrap-input {
@@ -24,8 +23,12 @@
 
 label.mbsc-input {
   margin:0px 5px!important;
-  width: calc(100% - 32px);
+  width: calc(100% - 0px);
   position: absolute;
+  background: transparent;
+  cursor: pointer;
+}
+.mbsc-input input {
   background: transparent;
 }
 

@@ -16,6 +16,14 @@ import dashboardRoutes from "routes/dashboard.jsx";
 import appStyle from "assets/jss/layouts/dashboardStyle.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import ItemGrid from "components/Grid/ItemGrid.jsx";
+import JssProvider from 'react-jss/lib/JssProvider';
+import { createGenerateClassName } from '@material-ui/core/styles';
+
+const generateClassName = createGenerateClassName({
+  //dangerouslyUseGlobalCSS: true,
+  productionPrefix: 'dashboardx',
+});
+
 const switchRoutes = (
   <Switch>
     {dashboardRoutes.map((prop, key) => {
@@ -86,23 +94,30 @@ class Dashboard extends React.Component {
       });
     return (
       <div className={classes.wrapper}>
-        <Sidebar
-          routes={dashboardRoutes}
-          handleDrawerToggle={this.handleDrawerToggle}
-          open={this.state.mobileOpen}
-          color="blue"
-          bgColor="white"
-          miniActive={this.state.miniActive}
-          {...rest}
-        />
-        <div className={mainPanel} ref="mainPanel">
-          <Header
-            sidebarMinimize={this.sidebarMinimize.bind(this)}
-            miniActive={this.state.miniActive}
+        <JssProvider generateClassName={generateClassName}>
+
+          <Sidebar
             routes={dashboardRoutes}
             handleDrawerToggle={this.handleDrawerToggle}
+            open={this.state.mobileOpen}
+            color="blue"
+            bgColor="white"
+            miniActive={this.state.miniActive}
             {...rest}
           />
+        </JssProvider>
+        <div className={mainPanel} ref="mainPanel">
+          <JssProvider generateClassName={generateClassName}>
+
+            <Header
+              sidebarMinimize={this.sidebarMinimize.bind(this)}
+              miniActive={this.state.miniActive}
+              routes={dashboardRoutes}
+              handleDrawerToggle={this.handleDrawerToggle}
+              {...rest}
+            />
+          </JssProvider>
+
           {/* On the /maps/full-screen-maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
           <GridContainer justify="center">
             <ItemGrid sm={12} xs={12} lg={6} md={6}>

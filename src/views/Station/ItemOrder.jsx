@@ -49,7 +49,7 @@ class ItemOrder extends React.Component {
           <div className="wrap-user-info">
             <span>
               <span className="order-id">#{item.serial}</span>
-              <span className="order-email">{item.email}</span>
+              <span className="order-email">{item.guest_name}</span>
             </span>
             <span className="order-address">{item.station_address}</span>
           </div>

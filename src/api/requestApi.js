@@ -27,9 +27,9 @@ export const getRequest = (api, fn) => {
 export const postByToken = (api, data, fn) => {
     var contentType = "application/json";
     // api accept image
-    if(api === API.REQUEST_COMFIRM_APPOINTMENT || api === API.REQUEST_COMPLETE || api === API.NEW_BOOK){
-        contentType = "multipart/form-data"
-    }
+    // if(api === API.REQUEST_COMFIRM_APPOINTMENT || api === API.REQUEST_COMPLETE || api === API.NEW_BOOK){
+    //     contentType = "multipart/form-data"
+    // }
     sessionService.loadSession()
         .then((value) => {
             let token_id = value.token;

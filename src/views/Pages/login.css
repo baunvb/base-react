@@ -1,7 +1,11 @@
-.center-login {
-  margin-top: 20%;
+.center-page {
+  height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+}
+.center-login {
+  position: relative;
 }
 .wrap-form-login {
   justify-content: center;

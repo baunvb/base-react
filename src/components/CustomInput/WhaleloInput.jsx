@@ -53,16 +53,16 @@ class WhaleloInput extends React.PureComponent {
           >
           </input>
           {
-            type === "date" && <mobiscroll.Date name={name} value={value} className="mobiscroll" lang="en" onSet={(event, inst) => this.props.onSet(event, inst, name)} />
+            selectAble && <img className="icon-select" src={iconSelect} />
+          }
+          {
+            type === "date" && <mobiscroll.Date name={name} value={value} className="mobiscroll" lang="vi" onSet={(event, inst) => this.props.onSet(event, inst, name)} />
           }
 
           {
             type === "time" && <mobiscroll.Time name={name} value={value} className="mobiscroll" lang="vi" onSet={(event, inst) => this.props.onSet(event, inst, name)} />
           }
 
-          {
-            selectAble && <img className="icon-select" src={iconSelect} />
-          }
           {
             type === "select" && <mobiscroll.Select className="select" display="bubble" value={value} data={this.props.items} className="mobiscroll" lang="vi" onSet={(event, inst) => this.props.onSet(event, inst, name)}>
               <mobiscroll.Input inputStyle="box"></mobiscroll.Input>

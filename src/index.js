@@ -12,25 +12,27 @@ import { host } from "config/host";
 import "assets/scss/material-dashboard-pro-react.css";
 import { createBrowserHistory } from "history";
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
+import {validateSession} from 'common/function.jsx'
+
 //datime
 //import "pickerjs/picker.js";
 //import "pickerjs/picker.css";
 const hist = createBrowserHistory();
 // Add the sessionReducer
 
-const validateSession = () => {
-  return true;
-  //  return sessionService.loadUser()
-  //     .then((value) => {
-  //       console.log("current user", value)
-  //       let token_id = value.token_id;
-  //       return axios.post(host + "checkToken", {}, {
-  //         headers: {
-  //           "access_token": token_id
-  //         }
-  //       }).then(res => res.data.message);
-  //     })
-}
+// const validateSession = () => {
+//    //return true;
+//   return sessionService.loadSession()
+//     .then((value) => {
+//       console.log("current user", value)
+//       let token_id = value.token;
+//       return axios.post(host + "station/checktoken", {}, {
+//         headers: {
+//           "authorization": "Bearer " + token_id
+//         }
+//       }).then(res => res.data.code === 200);
+//     })
+// }
 // Check token
 const options = { redirectPath: '', driver: 'COOKIES', validateSession };
 

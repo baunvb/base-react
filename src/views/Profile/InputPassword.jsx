@@ -5,25 +5,29 @@ import 'views/Profile/inputpassword.css'
 class InputPassword extends React.Component {
     constructor(props) {
         super(props)
+        this.state = {
+            show: false
+        }
     }
 
     onShowPass = () => {
-        return;
+        this.setState((prevState) => ({
+            show: !prevState.show
+        }))
     }
 
     render() {
         return (
             <div className="main">
                 <input
-                    type={"password"}
+                    type={this.state.show ? "text" : "password"}
                     className="input-pass"
                     name={this.props.name}
                     onChange={(e) => this.props.onChange(e)}
                 >
                 </input>
                 {
-                    <img className="icon-show-pass" src={iconShowPass} onClick={e => this.onShowPass()} />
-                        
+                    <img className="icon-show-pass" src={iconShowPass} onClick={e => this.onShowPass()} />     
                 }
 
             </div>

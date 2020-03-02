@@ -2,7 +2,8 @@ import React from 'react';
 import 'views/Booking/completebooking.css'
 import { vndStyle, normalizeDateTime, requestPrice } from 'common/function.jsx';
 import itemImage from 'assets/img/wlicon/item_img.png'
-
+import { BASE_URL_IMG } from 'config/host.js';
+import ImageViewer from '../../components/ImageViewer/ImageViewer';
 class DetailBooking extends React.Component {
   constructor(props) {
     super(props);
@@ -16,16 +17,21 @@ class DetailBooking extends React.Component {
 
   }
 
- 
+  openImage = (src) => {
+    this.imageViewer.update("show", true)
+    this.imageViewer.update("src", src)
+  }
 
   render() {
     const { data } = this.props.location
-    const  DateTimeDropOff = normalizeDateTime(data.drop_off_time);
-    const  DateTimePickup = normalizeDateTime(data.pick_up_time);
+    const DateTimeDropOff = normalizeDateTime(data.drop_off_time);
+    const DateTimePickup = normalizeDateTime(data.pick_up_time);
 
     return (
       <div className="wrap-add-booking">
-
+        <ImageViewer
+          ref={instance => this.imageViewer = instance}
+        />
         <div className="booking-title">
           Booking Details
           <span className="serial-order">#{data.serial}</span>
@@ -69,18 +75,15 @@ class DetailBooking extends React.Component {
           <hr />
 
           <div>
-            <span className="left-label">Luggage Photos:</span>
+    <span className="left-label">Luggage Photos:({data.images !== undefined ? data.images.length : 0})</span>
             <div className="list-imgs">
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
-              <img className='item-img' src={itemImage} />
+              {
+               data.images !== undefined && data.images.map((item, key) => {
+                  return (
+                    <img className='item-img' src={BASE_URL_IMG + item} onClick={e => this.openImage(BASE_URL_IMG + item)} />
+                  )
+                })
+              }
             </div>
           </div>
           <hr />

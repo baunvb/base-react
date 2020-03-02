@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as requestApi from 'api/requestApi';
 import "./login.css";
-import {validateEmail} from "common/function.jsx";
+import { validateEmail } from "common/function.jsx";
 
 import PropTypes from "prop-types";
 import CustomAlert from "components/Alert/CustomAlert.jsx"
@@ -58,9 +58,9 @@ class ForgotPassword extends Component {
 
     onChange(e) {
         const { value, name } = e.target;
-        this.setState({ 
+        this.setState({
             [name]: value
-         });
+        });
     }
 
 
@@ -118,40 +118,39 @@ class ForgotPassword extends Component {
 
         return (
 
-            <JssProvider generateClassName={generateClassName}>
-                <div>
-                    {this.state.alert}
-                    <div className="center-login">
-                        <GridContainer justify="center">
-                            <ItemGrid xs={12} sm={6} md={4}>
-                                <div className="wrap-img-login">
-                                    <img alt="loại xe" src={logo} />
+            <div className="center-page">
+
+                {this.state.alert}
+                <div className="center-login">
+                    <GridContainer justify="center">
+                        <ItemGrid xs={12} sm={6} md={4}>
+                            <div className="wrap-img-login">
+                                <img alt="loại xe" src={logo} />
+                            </div>
+                            <div className="wrap-form-login">
+                                <span className="lable-input">Email</span>
+                                <div>
+                                    <input
+                                        type="text"
+                                        className="input-login"
+                                        name="email"
+                                        onChange={(e) => this.onChange(e)}
+                                    >
+                                    </input>
+                                    {this.state.invalidEmail}
                                 </div>
-                                    <div className="wrap-form-login">
-                                        <span className="lable-input">Email</span>
-                                        <div>
-                                            <input
-                                                type="text"
-                                                className="input-login"
-                                                name="email"
-                                                onChange={(e) => this.onChange(e)}
-                                            >
-                                            </input>
-                                            {this.state.invalidEmail}
-                                        </div>
-                                        <span className="lable-note">*New password will be sent to you email </span>
-                                        <button className="btn-login" onClick={() => this.onSubmit()} type="submit">
-                                            Get password
+                                <span className="lable-note">*New password will be sent to you email </span>
+                                <button className="btn-login" onClick={() => this.onSubmit()} type="submit">
+                                    Get password
                                         </button>
 
-                                    </div>
+                            </div>
 
-                            </ItemGrid>
-                        </GridContainer>
-                    </div>
-                
+                        </ItemGrid>
+                    </GridContainer>
                 </div>
-            </JssProvider>
+
+            </div>
 
         );
 

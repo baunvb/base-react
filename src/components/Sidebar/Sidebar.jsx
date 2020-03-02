@@ -93,7 +93,7 @@ class Sidebar extends React.Component {
     let self = this;
     sessionService.loadUser().then((value) => {
       self.setState({
-        profile: value.user.station,
+        profile: value.user,
       })
     })
       .catch((err) => {
