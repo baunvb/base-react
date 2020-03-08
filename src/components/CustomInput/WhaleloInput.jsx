@@ -2,7 +2,6 @@ import React from 'react';
 import 'components/CustomInput/whaleloinput.css';
 import iconSelect from 'assets/img/wlicon/icon_select.png';
 import mobiscroll from '@mobiscroll/react';
-import DateInput from 'components/CustomInput/DateInput.jsx';
 mobiscroll.settings = {
   theme: 'ios' /* set global theme */
 }
@@ -35,13 +34,18 @@ class WhaleloInput extends React.PureComponent {
 
 
   render() {
-    const { name, label, selectAble, type, value } = this.props;
+    const { name, label, selectAble, type, value, icon } = this.props;
     const {invalidText} = this.state;
     console.log("Rerender" + name)
 
     return (
       <div className="wrap-whalelo-input">
-        <span className="lable-input">{label}</span>
+        <div>
+          <span className="lable-input">{label}</span>
+          {
+            icon && <img className="right-icon" src={icon} onClick={this.props.onIconClick} />
+          }
+        </div>
         <div className="wrap-input">
           <input
             disabled={type !== "text"}
@@ -82,7 +86,8 @@ class WhaleloInput extends React.PureComponent {
 
 WhaleloInput.defaultProps = {
   selectAble: false,
-  type: "text"
+  type: "text",
+  icon: null
 }
 
 export default WhaleloInput

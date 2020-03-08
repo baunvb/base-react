@@ -1,10 +1,18 @@
 import { combineReducers } from 'redux'
 import { sessionReducer } from 'redux-react-session';
+import UserReducer from 'reducer/UserReducer.jsx'
+import ReportReducer from 'reducer/ReportReducer.jsx'
+
 import { STORAGE_ACTION } from 'actions/StorageActions.js'
 var currentState = {
   bookingList: [],
   confirmList: [],
-  completeList: []
+  completeList: [],
+  pricing: {
+    hourly_rates: [],
+    daily_rates: []
+  },
+  tab: 0
 }
 
 function StorageReducer(state = currentState, action) {
@@ -25,6 +33,19 @@ function StorageReducer(state = currentState, action) {
         ...state,
         completeList: action.data,
       }
+    case STORAGE_ACTION.PRICING_LIST:
+      return {
+        ...state,
+        pricing: {
+          hourly_rates: action.data.hourly_rates,
+          daily_rates: action.data.daily_rates.rates,
+        }
+      }
+    case STORAGE_ACTION.STORAGE_TAB:
+      return {
+        ...state,
+        tab: action.data
+      }
     default:
       return { ...state }
   }
@@ -33,7 +54,9 @@ function StorageReducer(state = currentState, action) {
 
 const myReducer = combineReducers({
   session: sessionReducer,
+  user: UserReducer,
   storage: StorageReducer,
+  report: ReportReducer
 })
 
 export default myReducer

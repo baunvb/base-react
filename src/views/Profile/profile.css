@@ -6,12 +6,38 @@
   height: 128px;
   border-radius: 50%;
 }
-
-
+.icon-camera{
+  top: 90px;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
 .avatar-border {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.input-update-avatar {
+  cursor: pointer;
+  position: absolute;
+  text-align: center;
+  border: none;
+  background: transparent;
+  left: 50%;
+  top: 64px;
+  width: 128px;
+  height: 64px;
+  border-bottom-left-radius: 100px;
+  border-bottom-right-radius: 100px;
+  transform: translateX(-50%);
+  color: transparent;
+}
+
+.input-update-avatar:hover {
+  background-color: #d6d6d680;
 }
 
 .top-info {
@@ -32,7 +58,38 @@
   margin-top: 12px;
   color: #3E3E54;
 }
-
+.input-update-avatar::-webkit-file-upload-button {
+  visibility: hidden;
+  /* width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  background-image: url("../../assets/img/wlicon/icon_camera.png") */
+}
+.input-update-avatar::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: transparent;
+}
+.input-update-avatar::-moz-placeholder { /* Firefox 19+ */
+  color: transparent;
+}
+.input-update-avatar:-ms-input-placeholder { /* IE 10+ */
+  color: transparent;
+}
+.input-update-avatar:-moz-placeholder { /* Firefox 18- */
+  color: transparent;
+}
+.input-update-avatar:hover::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #999;
+}
+.input-update-avatar:hover::-moz-placeholder { /* Firefox 19+ */
+  color: #999;
+}
+.input-update-avatar:hover:-ms-input-placeholder { /* IE 10+ */
+  color: #999;
+}
+.input-update-avatar:hover:-moz-placeholder { /* Firefox 18- */
+  color: #999;
+}
 .email {
   font-family: Be Vietnam;
   font-style: normal;

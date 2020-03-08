@@ -11,8 +11,10 @@ import axios from "axios";
 import { host } from "config/host";
 import "assets/scss/material-dashboard-pro-react.css";
 import { createBrowserHistory } from "history";
+import { getCookie } from 'common/function.jsx'
+
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
-import {validateSession} from 'common/function.jsx'
+// import {validateSession} from 'common/function.jsx'
 
 //datime
 //import "pickerjs/picker.js";
@@ -20,20 +22,17 @@ import {validateSession} from 'common/function.jsx'
 const hist = createBrowserHistory();
 // Add the sessionReducer
 
-// const validateSession = () => {
-//    //return true;
-//   return sessionService.loadSession()
-//     .then((value) => {
-//       console.log("current user", value)
-//       let token_id = value.token;
-//       return axios.post(host + "station/checktoken", {}, {
-//         headers: {
-//           "authorization": "Bearer " + token_id
-//         }
-//       }).then(res => res.data.code === 200);
-//     })
-// }
+const validateSession = () => {
+  const token_id = getCookie("token");
+   //return true;
+   return axios.post(host + "api/station/checktoken", {}, {
+    headers: {
+      "authorization": "Bearer " + token_id
+    }
+  }).then(res => res.data.code === 200);
+}
 // Check token
+
 const options = { redirectPath: '', driver: 'COOKIES', validateSession };
 
 const store = createStore(myReducer, undefined, compose(applyMiddleware(thunkMiddleware)));

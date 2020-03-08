@@ -1,0 +1,114 @@
+
+.tab-selected {
+  color: #FFF !important;
+  background: #3B4EDC !important;
+  border-bottom: none !important;
+  border-radius: 6px !important;
+}
+
+.tab-root {
+  height: 35px !important;
+  min-height: 35px !important;
+  text-transform: none !important;
+  background: rgba(118, 118, 128, 0.12);
+  min-width: unset !important;
+}
+
+.app-bar-pricing {
+  box-shadow: none !important;
+  margin: 0 16px !important;
+  width: auto !important;
+}
+
+.tab-indicator {
+  background: transparent !important;
+}
+
+.tabs-flexContainer {
+  background: rgba(118, 118, 128, 0.12);
+  border-radius: 6px;
+}
+
+.over-alert {
+  position: absolute;
+  z-index: 1035;
+  width: 100%;
+  height: 100%;
+  background: #00000080;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+}
+.pricing-content {
+  width: 90%;
+  max-width: 320px;
+  /* max-height: 400px; */
+  height: auto;
+  background: #FFF;
+  position: absolute;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 4px;
+}
+
+.header {
+  text-align: center
+}
+
+.text-bold {
+  font-family: Be Vietnam;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 23px;
+  align-items: center;
+  text-align: right;
+  color: #002C51;
+}
+.text-normal {
+  font-family: Be Vietnam;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+  align-items: center;
+  color: #002C51;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.table-row {
+  margin: 8px 16px;
+  padding-bottom: 8px;
+  border: none;
+  border-bottom: 1px solid #C4C4C4;
+}
+
+.footer-discount{
+  background: linear-gradient(105.75deg, #FFC600 -52.75%, #FD6E6A 98.98%);
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  margin: 20px 16px 16px 16px;
+  text-align: center;
+  color: #FFF;
+  padding: 12px;
+}
+
+.discount-text {
+  font-family: Be Vietnam;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+  align-items: center;
+}

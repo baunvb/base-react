@@ -10,19 +10,17 @@ import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
 import WhaleloInput from 'components/CustomInput/WhaleloInput.jsx'
 import InputPassword from 'views/Profile/InputPassword.jsx'
 import { API } from 'config/Constant.js'
-
+import { connect } from 'react-redux'
+import { USER_ACTION } from 'actions/UserActions.js'
+import Resizer from 'react-image-file-resizer';
+import IconCamera from 'assets/img/wlicon/icon_camera.png';
+import {BASE_URL_IMG} from 'config/host'
 class UserProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             err: null,
-            profile: {
-                "email": "",
-                "password": "",
-                "name": "",
-                "phone_number": "",
-                "address": "",
-            }
+            isSelectAble: false
         }
 
     }
@@ -55,7 +53,7 @@ class UserProfile extends React.Component {
             })
             requestApi.postByToken(API.CHANGE_PASSWORD, { old_password: old_password, new_password: new_password }, (res) => {
                 if (res.code === 200) {
-                    this.updatePassSuccess.show()
+                    this.updatePassSuccess.show();
                 } else {
                     this.updatePassFalse.show()
                 }
@@ -66,14 +64,11 @@ class UserProfile extends React.Component {
 
     onUpdateProfile = () => {
         const { edit_name, edit_phoneNumber } = this.state;
-        console.log("XXXX", { ...this.state.user, name: edit_name })
-        console.log(edit_name, edit_phoneNumber)
         requestApi.postByToken(API.UPDATE_INFO, { name: edit_name, phone_number: edit_phoneNumber }, (res) => {
             if (res.code === 200) {
-                sessionService.saveUser({ user: { ...this.state.user, name: edit_name, phone_number: edit_phoneNumber } })
-                    .then(() => {
-                    }).catch(err => console.error(err));
-                this.updateProfileSuccess.show()
+                this.updateProfileSuccess.show();
+                this.props.updateState(USER_ACTION.UPDATE_INFO, { name: edit_name, phone_number: edit_phoneNumber })
+
             } else {
                 this.updateProfileFalse.show()
             }
@@ -88,22 +83,22 @@ class UserProfile extends React.Component {
     }
 
     logout = async () => {
-        // await requestApi.postByToken("salepoints/signout", {}, (res) => { });
         sessionService.deleteSession();
-        sessionService.deleteUser();
         this.props.history.push('/login')
     }
 
     componentDidMount() {
-        sessionService.loadUser().then(value => {
-            console.log("loadUser", value)
+        console.log("componentDidMount", this.props.profile)
+        
+    }
+
+    componentDidUpdate(prevProp, prevState){
+        if(prevProp.profile !== this.props.profile){
             this.setState({
-                user: value.user,
-                profile: value.user,
-                edit_name: value.user.name,
-                edit_phoneNumber: value.user.phone_number
+                edit_name: this.props.profile.name,
+                edit_phoneNumber: this.props.profile.phone_number
             })
-        })
+        }
     }
 
     onInputPassword = (e) => {
@@ -117,6 +112,50 @@ class UserProfile extends React.Component {
         this.setState({
             [name]: value
         });
+    }
+
+    onHoverAvatar = (e) => {
+        this.setState({
+            isSelectAble: true
+        })
+    }
+
+    onSelectAvatar = (e) => {
+        var file = e.target.files[0];
+        Resizer.imageFileResizer(
+            file,
+            500,
+            500,
+            'JPEG',
+            80,
+            0,
+            uri => {
+                requestApi.postByToken(API.UPDATE_AVATAR, {avatar: uri}, (res) => {
+                    console.log("UPDATE_AVATAR", res.data.avatar)
+                    if(res.code === 200){
+                        var imgUrl = res.data.avatar;
+                        this.props.updateState(USER_ACTION.UPDATE_AVATAR, imgUrl)
+
+                    }
+                })
+            },
+            'base64'
+          );
+        let reader = new FileReader();
+        reader.onloadend = () => {
+        
+        //request update avatar
+          this.setState((prevState) => ({
+            avatar: reader.result
+          }));
+        };
+        reader.readAsDataURL(file);
+    }
+
+    onErrorImage = () => {
+        this.setState({
+            avatar: DefaultAvatar
+        })
     }
 
     render() {
@@ -207,11 +246,24 @@ class UserProfile extends React.Component {
 
                 <div className="top-info">
                     <div>
-                        <img className="img-avatar" src={DefaultAvatar} />
+                        <img className="img-avatar" src={BASE_URL_IMG + this.props.profile.avatar} onError={this.onErrorImage} />
                         <img className="avatar-border" src={AvatarBorder} />
+                        {
+                            this.state.isSelectAble && <img className="icon-camera" src={IconCamera}/>
+                        }
+                        <input placeholder="Update avatar" className="input-update-avatar" type="file" accept="image/*"
+                            onChange={e => this.onSelectAvatar(e)}
+                            onMouseOver={e => this.onHoverAvatar(e)}
+                            onMouseLeave={e => {
+                                this.setState({
+                                    isSelectAble: false
+                                })
+                            }}
+                        ></input>
+                        
                     </div>
-                    <span className="username">{this.state.profile.name}</span>
-                    <span className="email">{this.state.profile.email}</span>
+                    <span className="username">{this.props.profile.name}</span>
+                    <span className="email">{this.props.profile.email}</span>
                 </div>
                 <hr />
 
@@ -242,4 +294,16 @@ class UserProfile extends React.Component {
 
 }
 
-export default UserProfile
+const mapDispatchToProps = dispatch => {
+    return {
+        updateState: (type, data) => dispatch({ type, data })
+    }
+}
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        profile: state.user.user,
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserProfile)

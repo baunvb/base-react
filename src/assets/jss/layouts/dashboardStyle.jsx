@@ -35,9 +35,9 @@ const appStyle = theme => ({
     width: "100%",
   },
   content: {
-    marginTop: "70px",
+    marginTop: "0px",
     "@media (min-width: 320px) and (max-width: 767px)": {
-      marginTop: "55px"
+      marginTop: "50px"
     },
   },
   container: { ...containerFluid },

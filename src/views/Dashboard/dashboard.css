@@ -1,0 +1,10 @@
+.wrap-select {
+  display: flex;
+  flex-direction: row;
+  margin-left: 16px;
+  margin-bottom: 8px;
+}
+.select {
+  margin-right: 20px;
+  width: 100px;
+}

@@ -54,24 +54,9 @@ function Header({ ...props }) {
       [classes.sidebarMinimizeRTL]: rtlActive
     });
   return (
-    <AppBar style={positionClass} className={classes.appBar + appBarClasses}>
-      <Toolbar className={classes.container}>
-        <Hidden smDown>
-          <div className={sidebarMinimize}>
-            {props.miniActive ? (
-              <CustomIconButton color="white" onClick={props.sidebarMinimize}>
-                <ViewList className={classes.sidebarMiniIcon} />
-              </CustomIconButton>
-            ) : (
-              <CustomIconButton color="white" onClick={props.sidebarMinimize}>
-                <MoreVert className={classes.sidebarMiniIcon} />
-              </CustomIconButton>
-            )}
-          </div>
-        </Hidden>
-
-
-        <Hidden mdUp>
+    <Hidden mdUp>
+      <AppBar style={positionClass} className={classes.appBar + appBarClasses}>
+        <Toolbar className={classes.container}>
           <IconButton
             className={classes.appResponsive}
             color="inherit"
@@ -81,11 +66,11 @@ function Header({ ...props }) {
             <Menu />
           </IconButton>
           <div className="wrap-logo">
-              <img className="icon-toolbar" src={ToolbarIcon} />
+            <img className="icon-toolbar" src={ToolbarIcon} />
           </div>
-        </Hidden>
-      </Toolbar>
-    </AppBar>
+        </Toolbar>
+      </AppBar>
+    </Hidden>
   );
 }
 

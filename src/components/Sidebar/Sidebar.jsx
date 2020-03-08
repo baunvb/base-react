@@ -15,15 +15,19 @@ import ListItemText from "material-ui/List/ListItemText";
 import Hidden from "material-ui/Hidden";
 import Collapse from "material-ui/transitions/Collapse";
 import IconWL from "assets/img/wlicon/icon_wl_sidebar.png";
+import { connect } from 'react-redux'
 
 
 import avatar from "assets/img/faces/avatar.png";
 // core components
 import sidebarStyle from "assets/jss/components/sidebarStyle.jsx";
+import { USER_ACTION } from 'actions/UserActions.js'
 
 import { host } from "../../config/host";
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName } from '@material-ui/core/styles';
+import * as requestApi from 'api/requestApi.js';
+import { API } from "config/Constant.js";
 const generateClassName = createGenerateClassName({
   //dangerouslyUseGlobalCSS: true,
   productionPrefix: 'sidebar',
@@ -74,7 +78,7 @@ class Sidebar extends React.Component {
         "name": "",
         "phone_number": "",
         "address": "",
-    }
+      }
     };
     this.activeRoute.bind(this);
   }
@@ -90,16 +94,13 @@ class Sidebar extends React.Component {
 
 
   componentDidMount() {
-    let self = this;
-    sessionService.loadUser().then((value) => {
-      self.setState({
-        profile: value.user,
-      })
+    //get User profile
+    requestApi.postByToken(API.GET_INFO, {}, (res) => {
+      console.log("API.GET_INFO", res.data.station)
+      this.props.updateState(USER_ACTION.FETCH_INFO, res.data.station)
     })
-      .catch((err) => {
-        console.log(err);
-      })
   }
+
   onErrorAvatar = () => {
     this.setState({
       avatar: avatar
@@ -143,7 +144,7 @@ class Sidebar extends React.Component {
               <img src={IconWL} onError={this.onErrorAvatar} />
 
               <ListItemText
-                primary={this.state.profile.name}
+                primary={this.props.profile.name}
                 disableTypography={true}
                 className={itemText + " " + classes.userItemText}
               />
@@ -292,7 +293,7 @@ class Sidebar extends React.Component {
             </ListItem>
           );
         })}
-  
+
       </List>
     );
 
@@ -344,12 +345,6 @@ class Sidebar extends React.Component {
               user={user}
               links={links}
             />
-            {image !== undefined ? (
-              <div
-                className={classes.background}
-                style={{ backgroundImage: "url(" + image + ")" }}
-              />
-            ) : null}
           </Drawer>
         </Hidden>
         <Hidden smDown>
@@ -368,12 +363,7 @@ class Sidebar extends React.Component {
               user={user}
               links={links}
             />
-            {image !== undefined ? (
-              <div
-                className={classes.background}
-                style={{ backgroundImage: "url(" + image + ")" }}
-              />
-            ) : null}
+
           </Drawer>
         </Hidden>
       </div>
@@ -396,4 +386,16 @@ Sidebar.propTypes = {
   routes: PropTypes.arrayOf(PropTypes.object)
 };
 
-export default withStyles(sidebarStyle)(Sidebar);
+const mapStateToProps = (state, ownProps) => {
+  console.log("SESSION STATE", state.session)
+  return {
+    profile: state.user.user,
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    updateState: (type, data) => dispatch({ type, data })
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(sidebarStyle)(Sidebar))
+//export default withStyles(sidebarStyle)(Sidebar);

@@ -22,7 +22,7 @@ const App = ({ authenticated, checked }) => (
               case "/forgetpassword":
                 return (<Route path={prop} key={key} component={Pages} />)
               default:
-                return (<PrivateRoute exact path={prop} component={Dashboard} authenticated={authenticated} />)
+                return (<PrivateRoute exact path={prop} component={Dashboard} authenticated={true} />)
             }
           })
         }

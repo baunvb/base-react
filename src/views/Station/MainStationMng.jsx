@@ -15,33 +15,12 @@ import { connect } from "react-redux";
 import { STORAGE_ACTION } from 'actions/StorageActions.js'
 import { createGenerateClassName } from '@material-ui/core/styles';
 import JssProvider from 'react-jss/lib/JssProvider';
-
+import TabPanel from 'components/Tab/TabPanel.jsx';
 const generateClassName = createGenerateClassName({
   //dangerouslyUseGlobalCSS: true,
-  productionPrefix: 'dashboard',
+  productionPrefix: 'station',
 });
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
 
-  return (
-    <div
-      component="div"
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
-      {value === index && <div p={3}>{children}</div>}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-};
 
 function a11yProps(index) {
   return {
@@ -55,14 +34,15 @@ class MainStationMng extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 0
+      value: props.tabIndex
     }
   }
 
   handleChange = (event, newValue) => {
     this.setState({
       value: newValue
-    })
+    });
+    this.props.updateState(STORAGE_ACTION.STORAGE_TAB, newValue)
   };
 
   handleChangeIndex = index => {
@@ -87,6 +67,12 @@ class MainStationMng extends React.Component {
     requestApi.postByToken(API.COMPLETED_LIST, {}, (res) => {
       if (res.code === 200) {
         this.props.updateState(STORAGE_ACTION.COMPLETE_LIST, res.data.appointments)
+      }
+    })
+
+    requestApi.getRequest(API.GET_PRICING, (res) => {
+      if (res) {
+        this.props.updateState(STORAGE_ACTION.PRICING_LIST, res);
       }
     })
   }
@@ -154,8 +140,8 @@ const mapDispatchToProps = dispatch => {
   }
 }
 const mapStateToProps = (state, ownProps) => {
-  console.log("Store", state.storage)
   return {
+    tabIndex: state.storage.tab,
     bookingList: state.storage.bookingList,
     confirmList: state.storage.confirmList,
     completeList: state.storage.completeList

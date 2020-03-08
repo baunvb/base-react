@@ -3,9 +3,6 @@ import * as requestApi from 'api/requestApi';
 import { vndStyle, normalizeDate } from "common/function.jsx"
 import ReactTable from "react-table";
 import { config } from 'views/Dashboard/TimelineJsonConfig.jsx';
-import sedan from 'assets/img/vehicle/sedan.png'
-import suv from 'assets/img/vehicle/suv.png'
-import minivan from 'assets/img/vehicle/minivan.png'
 
 const style = {
     subData: {
@@ -209,7 +206,7 @@ export default class TableList extends React.PureComponent {
                         ),
                         image: (
                             <div style={style.circle}>
-                                <img style={style.image} alt="loại xe" src={prop[config.Vehicle_type] === "sedan" ? sedan : prop[config.Vehicle_type] === "suv" ? suv : minivan} />
+                            {null}
                             </div>
                         )
                     })
@@ -283,7 +280,7 @@ export default class TableList extends React.PureComponent {
                     }}
                     noDataText={
                         this.state.loading ? null : (
-                            <span>0 chuyến</span>
+                            <span>0 booking</span>
                         )
                     }
                     columns={[

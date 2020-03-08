@@ -138,6 +138,13 @@ class CompleteBooking extends React.Component {
   }
 
   onSubmit = () => {
+    const { date_dropoff, time_dropoff, date_pickup, time_pickup } = this.state;
+    const isValidTimeRange = checkPickupTimeValid(date_dropoff, time_dropoff, date_pickup, time_pickup)
+    if (!isValidTimeRange) {
+      this.warningAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
+      this.warningAlert.show();
+      return;
+    }
     this.alert.show()
   }
 

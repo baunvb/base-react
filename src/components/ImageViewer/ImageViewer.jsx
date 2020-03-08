@@ -51,7 +51,6 @@ class ImageViewer extends React.Component {
 }
 
 ImageViewer.defaultProps = {
-  isShow: true
 }
 
 export default ImageViewer

@@ -3,7 +3,7 @@ import 'views/Booking/booking.css';
 import WhaleloInput from 'components/CustomInput/WhaleloInput.jsx';
 import { vndStyle } from 'common/function.jsx';
 import iconAddImg from 'assets/img/wlicon/icon_add_img.png';
-import itemImage from 'assets/img/wlicon/item_img.png'
+import InfoIcon from 'assets/img/wlicon/icon_info.svg';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
 import WarningAlert from 'components/Alert/WarningAlert.jsx'
 import mobiscroll from '@mobiscroll/react';
@@ -12,7 +12,7 @@ import { validateEmail, requestPrice, checkPickupTimeValid } from "common/functi
 import * as requestApi from 'api/requestApi';
 import Resizer from 'react-image-file-resizer';
 import ImageViewer from '../../components/ImageViewer/ImageViewer';
-
+import Pricing from "views/Booking/Pricing.jsx";
 mobiscroll.settings = {
   theme: 'ios' /* set global theme */
 }
@@ -70,7 +70,12 @@ class AddNewBooking extends React.Component {
   }
 
   componentDidMount() {
+    //this.pricing.update("show", true);
+    
+  }
 
+  onOpenPricing = () => {
+    this.pricing.update("show", true);
   }
 
   onCancel = () => {
@@ -78,14 +83,17 @@ class AddNewBooking extends React.Component {
   }
 
   onInput = (e) => {
+    let {name, value} = e.target
     this.setState({
-      [e.target.name]: e.target.value
+      [name]: value
     });
-    if (e.target.name === "email") {
-      var isEmailValid = validateEmail(e.target.value);
-      if (isEmailValid) {
-        this.inputEmail.hideInvalid();
-      }
+    if (name === "email") {
+      var isEmailValid = validateEmail(value);
+      if (isEmailValid) this.inputEmail.hideInvalid();
+    }
+
+    if(name === "fullname"){
+      if(value.length > 0) this.inputFullName.hideInvalid()
     }
   }
 
@@ -105,8 +113,6 @@ class AddNewBooking extends React.Component {
     const DatePickup = new Date(date_pickup);
     const TimePickup = new Date(time_pickup);
 
-    var formData = new FormData();
-
     const dataBooking = {
       "drop_off_time": `${DateDropoff.getMonth() + 1}/${DateDropoff.getDate()}/${DateDropoff.getFullYear()} ${TimeDropoff.getHours()}:${TimeDropoff.getMinutes()}`,
       "email": email,
@@ -115,17 +121,6 @@ class AddNewBooking extends React.Component {
       "pick_up_time": `${DatePickup.getMonth() + 1}/${DatePickup.getDate()}/${DatePickup.getFullYear()} ${TimePickup.getHours()}:${TimePickup.getMinutes()}`,
       "images": imgFiles
     }
-
-    //appointment
-
-    // for (var key in dataBooking) {
-    //   formData.append(key, dataBooking[key]);
-    // }
-
-    // console.log("imgFiles", imgFiles)
-
-    // formData.append("appointment", imgFiles)
-
 
     console.log("dataBooking", dataBooking)
 
@@ -147,13 +142,27 @@ class AddNewBooking extends React.Component {
   }
 
   onSubmit = () => {
-    const { email } = this.state;
+    const { email, fullname, date_dropoff, time_dropoff, date_pickup, time_pickup } = this.state;
     var isEmailValid = validateEmail(email);
+    let isValid = true;
     if (!isEmailValid) {
       this.inputEmail.showInvalid("Email is invalid");
-      return
+      isValid = false;
     }
-    this.alert.show()
+    if(fullname===""){
+      this.inputFullName.showInvalid("Please fill full name");
+      isValid = false;
+    }
+
+    const isValidTimeRange = checkPickupTimeValid(date_dropoff, time_dropoff, date_pickup, time_pickup)
+    if (!isValidTimeRange) {
+      this.warningAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
+      this.warningAlert.show();
+      isValid = false;
+    }
+
+    if(isValid) this.alert.show()
+
   }
 
   onClickAddImage = () => {
@@ -204,6 +213,9 @@ class AddNewBooking extends React.Component {
 
     return (
       <div className="wrap-add-booking">
+        <Pricing 
+          ref={instance => this.pricing = instance}
+        />
         <WarningAlert 
           ref={instance => this.warningAlert = instance}
         />
@@ -252,6 +264,7 @@ class AddNewBooking extends React.Component {
           />
           <hr />
           <WhaleloInput
+            ref={instance => this.inputFullName = instance}
             name="fullname"
             label="Full name*"
             onChange={this.onInput}
@@ -321,6 +334,8 @@ class AddNewBooking extends React.Component {
             items={ITEMS}
             name="item_count"
             label="Number of charged items*"
+            icon={InfoIcon}
+            onIconClick={e => this.onOpenPricing()}
             onSet={this.onSetDateTime}
 
           />

@@ -80,15 +80,9 @@ class LoginPage extends Component {
                 if (responseLogin.data.code === 200) {
                     const token = responseLogin.data.data.station.token;
                     console.log("ON LOGIN", token)
-                    sessionService.saveSession({ token })
-                        .then(() => {
-                            sessionService.saveUser({user: responseLogin.data.data.station})
-                                .then(() => {
-                                    history.push('/home');
-                                }).catch(err => console.error(err));
-
-                            //history.push('/home');
-                        }).catch(err => console.error(err));
+                    await sessionService.saveSession({ token })
+                    document.cookie = `token=${token}`;
+                    history.push('/home');
                 }
             } catch (err) {
                 console.log("responseLogin", err.response);
@@ -106,7 +100,12 @@ class LoginPage extends Component {
     onChange(e) {
         const { value, name } = e.target;
         const { user } = this.state;
-        user[name] = value;
+        if(name === "email") {
+            user[name] = value.toLowerCase();
+        } else {
+            user[name] = value;
+        }
+        
         this.setState({ user });
     }
 

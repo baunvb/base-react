@@ -3,16 +3,13 @@ import { vndStyle } from "common/function.jsx"
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName } from '@material-ui/core/styles';
 
-var type = 'Bar'
 
 const generateClassName = createGenerateClassName({
     //dangerouslyUseGlobalCSS: true,
     productionPrefix: 'pricecontent',
 });
-const vnd = ' vnđ';
-const chuyenxe = ' chuyến xe';
 const root = {
-    main: { marginTop: "10px", marginBottom: "10px", paddingRight: "20px", paddingLeft: "20px" },
+    main: { marginTop: "50px", marginBottom: "10px", paddingRight: "20px", paddingLeft: "20px" },
     topLabel: {
         position: "absolute",
         top: "10px"
@@ -23,22 +20,22 @@ const root = {
         bottom: "10px"
     },
     label: {
-        color: "#ffffff",
+        color: "#8C8C8C",
         fontSize: "16px",
         fontWeight: "normal",
     },
     value: {
-        color: "#ffffff",
+        color: "#009CDC",
         fontSize: "20px",
         fontWeight: "600",
     },
     donvi: {
-        color: "#ffffff",
+        color: "#009CDC",
         fontSize: "14px",
         fontWeight: "normal",
     },
     labelDate: {
-        color: "#000000",
+        color: "#8C8C8C",
         fontSize: "14px",
         fontWeight: "500",
     },
@@ -70,19 +67,19 @@ const root = {
         width: "calc(50% - 10px)",
         maxWidth: "200px",
         height: "80px",
-        borderRadius: "20px",
-        background: "#38b0d5",
-        padding: "0 20px"
+        borderRadius: "4px",
+        padding: "0 20px",
+        border: "1px solid #3B4EDC"
     },
     cardChuyenxe: {
         float: "right",
         display: "inline-block",
         position: "relative",
+        border: "1px solid #3B4EDC",
         height: "80px",
         width: "calc(50% - 10px)",
         maxWidth: "200px",
-        borderRadius: "20px",
-        background: "#89bd4e",
+        borderRadius: "4px",
         padding: "0px 20px"
     }
 }
@@ -90,9 +87,9 @@ export default class PriceContent extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            currentDate: this.props.currentDate,
-            price: this.props.price,
-            chuyenxe: this.props.chuyenxe,
+            currentDate: "01/01/2020",
+            price: 1000000,
+            chuyenxe: 25,
             justify: "center",
 
         }
@@ -114,21 +111,22 @@ export default class PriceContent extends React.PureComponent {
     }
 
     render() {
-        var price = vndStyle(this.state.price);
+        const {datapoint} = this.props
+        var price = vndStyle(datapoint.price);
         return (
             <JssProvider generateClassName={generateClassName}>
                 <div style={root.main}>
                     <div  style={root.wrapDate}>
                         <span>
-                            <span style={root.labelDate}>Chi tiết </span>
-                            <span style={root.date}>({this.state.currentDate})</span>
+                            <span style={root.labelDate}>Detail: </span>
+                            <span style={root.date}>{datapoint.label}</span>
                         </span>
                     </div>
 
                     <div style={{ display: "inline-block", clear: "both", width: "100%", maxWidth: "400px", textAlign: this.state.justify }}>
                         <div style={root.cardPrice}>
                             <div style={root.topLabel}>
-                                <span style={root.label}>Tổng doanh thu </span> <br></br>
+                                <span style={root.label}>Total Income: </span> <br></br>
                             </div>
                             <div style={root.bottomLabel}>
 
@@ -138,11 +136,11 @@ export default class PriceContent extends React.PureComponent {
                         </div>
                         <div style={root.cardChuyenxe}>
                             <div style={root.topLabel}>
-                                <span style={root.label}>Tổng chuyến xe </span> <br></br>
+                                <span style={root.label}>Total Bookings </span> <br></br>
                             </div>
                             <div style={root.bottomLabel}>
-                                <span style={root.value}>{this.state.chuyenxe} </span>
-                                <span style={root.donvi}> chuyến</span>
+                                <span style={root.value}>{datapoint.booking} </span>
+                                <span style={root.donvi}> Booking(s)</span>
                             </div>
                         </div>
                     </div>

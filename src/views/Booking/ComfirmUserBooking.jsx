@@ -3,10 +3,11 @@ import 'views/Booking/completebooking.css'
 import 'views/Booking/booking.css';
 
 import WhaleloInput from 'components/CustomInput/WhaleloInput.jsx'
-import { vndStyle, requestPrice, checkPickupTimeValid } from 'common/function.jsx';
-import itemImage from 'assets/img/wlicon/item_img.png'
+import { vndStyle, requestPrice, checkPickupTimeValid, validateEmail } from 'common/function.jsx';
+import InfoIcon from 'assets/img/wlicon/icon_info.svg';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
 import WarningAlert from 'components/Alert/WarningAlert.jsx'
+import Pricing from "views/Booking/Pricing.jsx";
 
 import iconAddImg from 'assets/img/wlicon/icon_add_img.png';
 import * as requestApi from 'api/requestApi.js';
@@ -45,6 +46,10 @@ class ComfirmUserBooking extends React.Component {
 
   }
 
+  onOpenPricing = () => {
+    this.pricing.update("show", true);
+  }
+
   async componentDidUpdate(prevProps, prevState) {
     const { date_dropoff, time_dropoff, date_pickup, time_pickup, item_count } = this.state;
 
@@ -79,9 +84,13 @@ class ComfirmUserBooking extends React.Component {
   }
 
   onInput = (e) => {
+    let {name, value} = e.target
     this.setState({
-      [e.target.name]: e.target.value
+      [name]: value
     })
+    if(name === "fullname"){
+      if(value.length > 0) this.inputFullName.hideInvalid()
+    }
   }
 
 
@@ -161,7 +170,21 @@ class ComfirmUserBooking extends React.Component {
   }
 
   onSubmit = () => {
-    this.alert.show()
+    const { fullname, date_dropoff, time_dropoff, date_pickup, time_pickup } = this.state;
+    let isValid = true;
+    if(fullname===""){
+      this.inputFullName.showInvalid("Please fill full name");
+      isValid = false;
+    }
+
+    const isValidTimeRange = checkPickupTimeValid(date_dropoff, time_dropoff, date_pickup, time_pickup)
+    if (!isValidTimeRange) {
+      this.warningAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
+      this.warningAlert.show();
+      isValid = false;
+    }
+
+    if(isValid) this.alert.show()
   }
 
   onSetDateTime = (event, inst, name) => {
@@ -176,7 +199,10 @@ class ComfirmUserBooking extends React.Component {
     const { data } = this.props.location
     return (
       <div className="wrap-add-booking">
-        <WarningAlert 
+        <Pricing
+          ref={instance => this.pricing = instance}
+        />
+        <WarningAlert
           ref={instance => this.warningAlert = instance}
         />
         <ImageViewer
@@ -224,6 +250,7 @@ class ComfirmUserBooking extends React.Component {
           <hr />
 
           <WhaleloInput
+            ref={instance => this.inputFullName = instance}
             name="fullname"
             value={this.state.fullname}
             onChange={this.onInput}
@@ -294,6 +321,8 @@ class ComfirmUserBooking extends React.Component {
             items={ITEMS}
             name="item_count"
             label="Number of charged items*"
+            icon={InfoIcon}
+            onIconClick={e => this.onOpenPricing()}
             onSet={this.onSetDateTime}
 
           />

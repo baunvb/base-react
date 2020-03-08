@@ -47,7 +47,7 @@ var dashRoutes = [
     path: "/dashboard",
     name: "Report",
     icon: Timeline,
-    component: null
+    component: Dashboard
   },
   {
     hide: true,

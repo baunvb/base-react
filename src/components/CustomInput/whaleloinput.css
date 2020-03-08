@@ -45,3 +45,7 @@ input:disabled {
   color: red;
   text-align: center;
 }
+.right-icon {
+  float: right;
+  cursor: pointer;
+}
