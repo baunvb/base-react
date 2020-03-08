@@ -10,7 +10,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
-import WarningAlert from 'components/Alert/WarningAlert.jsx'
+import CommonAlert from 'components/Alert/CommonAlert.jsx'
 
 import { vndStyle, normalizeDateTime, requestPrice, checkPickupTimeValid } from 'common/function.jsx';
 import * as requestApi from 'api/requestApi';
@@ -68,8 +68,8 @@ class CompleteBooking extends React.Component {
       const pick_up_time = `${DatePickup.getMonth() + 1}/${DatePickup.getDate()}/${DatePickup.getFullYear()} ${TimePickup.getHours()}:${TimePickup.getMinutes()}`;
       const isValidTimeRange = checkPickupTimeValid(date_dropoff, time_dropoff, date_pickup, time_pickup)
       if (!isValidTimeRange) {
-        this.warningAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
-        this.warningAlert.show();
+        this.CommonAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
+        this.CommonAlert.show('warning');
         return;
       }
       const dataPrice = {
@@ -124,9 +124,11 @@ class CompleteBooking extends React.Component {
     requestApi.postByToken(API.REQUEST_COMPLETE, dataComplete, (res) => {
       console.log("Request complete booking", res)
       if (res.code === 200) {
-        this.alertCompleteSuccess.show();
+        this.CommonAlert.updateState("content", <span>Your booking was completed successfully!</span>);
+        this.CommonAlert.show('success');
       } else {
-        this.alertCompleteFalse.show();
+        this.CommonAlert.updateState("content", <span>Occured error when complete this booking. Please try again!</span>);
+        this.CommonAlert.show('warning');
       }
     })
 
@@ -141,8 +143,8 @@ class CompleteBooking extends React.Component {
     const { date_dropoff, time_dropoff, date_pickup, time_pickup } = this.state;
     const isValidTimeRange = checkPickupTimeValid(date_dropoff, time_dropoff, date_pickup, time_pickup)
     if (!isValidTimeRange) {
-      this.warningAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
-      this.warningAlert.show();
+      this.CommonAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
+      this.CommonAlert.show('warning');
       return;
     }
     this.alert.show()
@@ -160,13 +162,13 @@ class CompleteBooking extends React.Component {
 
     return (
       <div className="wrap-add-booking">
-        <WarningAlert
-          ref={instance => this.warningAlert = instance}
+        <CommonAlert
+          ref={instance => this.CommonAlert = instance}
         />
         <ImageViewer
           ref={instance => this.imageViewer = instance}
         />
-        <WhaleloAlert
+        {/* <WhaleloAlert
           ref={instance => this.alertCompleteSuccess = instance}
           header="Complete booking"
           showCancel={false}
@@ -184,7 +186,7 @@ class CompleteBooking extends React.Component {
           onConfirm={() => { return }}
         >
           <span>Occured error when complete this booking</span>
-        </WhaleloAlert>
+        </WhaleloAlert> */}
 
         <WhaleloAlert
           ref={instance => this.alert = instance}

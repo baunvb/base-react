@@ -5,7 +5,7 @@ import { vndStyle } from 'common/function.jsx';
 import iconAddImg from 'assets/img/wlicon/icon_add_img.png';
 import InfoIcon from 'assets/img/wlicon/icon_info.svg';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
-import WarningAlert from 'components/Alert/WarningAlert.jsx'
+import CommonAlert from 'components/Alert/CommonAlert.jsx'
 import mobiscroll from '@mobiscroll/react';
 import { ITEMS, API } from 'config/Constant';
 import { validateEmail, requestPrice, checkPickupTimeValid } from "common/function.jsx";
@@ -14,7 +14,7 @@ import Resizer from 'react-image-file-resizer';
 import ImageViewer from '../../components/ImageViewer/ImageViewer';
 import Pricing from "views/Booking/Pricing.jsx";
 mobiscroll.settings = {
-  theme: 'ios' /* set global theme */
+  theme: 'android' /* set global theme */
 }
 
 const date = new Date();
@@ -52,8 +52,8 @@ class AddNewBooking extends React.Component {
       const pick_up_time = `${DatePickup.getMonth() + 1}/${DatePickup.getDate()}/${DatePickup.getFullYear()} ${TimePickup.getHours()}:${TimePickup.getMinutes()}`;
       const isValidTimeRange = checkPickupTimeValid(date_dropoff, time_dropoff, date_pickup, time_pickup)
       if (!isValidTimeRange) {
-        this.warningAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
-        this.warningAlert.show();
+        this.CommonAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
+        this.CommonAlert.show('warning');
         return;
       }
       const dataPrice = {
@@ -71,7 +71,7 @@ class AddNewBooking extends React.Component {
 
   componentDidMount() {
     //this.pricing.update("show", true);
-    
+
   }
 
   onOpenPricing = () => {
@@ -83,7 +83,7 @@ class AddNewBooking extends React.Component {
   }
 
   onInput = (e) => {
-    let {name, value} = e.target
+    let { name, value } = e.target
     this.setState({
       [name]: value
     });
@@ -92,8 +92,8 @@ class AddNewBooking extends React.Component {
       if (isEmailValid) this.inputEmail.hideInvalid();
     }
 
-    if(name === "fullname"){
-      if(value.length > 0) this.inputFullName.hideInvalid()
+    if (name === "fullname") {
+      if (value.length > 0) this.inputFullName.hideInvalid()
     }
   }
 
@@ -127,9 +127,11 @@ class AddNewBooking extends React.Component {
     requestApi.postByToken(API.NEW_BOOK, dataBooking, (res) => {
       console.log("Request booking", res)
       if (res.code === 200) {
-        this.alertBookingSuccess.show()
+        this.CommonAlert.updateState("content", <span>You have create new booking successfully!</span>);
+        this.CommonAlert.show('success');
       } else {
-        this.alertBookingFalse.show()
+        this.CommonAlert.updateState("content", <span>Occurs an error when create new booking. Please try again!</span>);
+        this.CommonAlert.show('warning');
       }
     })
 
@@ -149,19 +151,19 @@ class AddNewBooking extends React.Component {
       this.inputEmail.showInvalid("Email is invalid");
       isValid = false;
     }
-    if(fullname===""){
+    if (fullname === "") {
       this.inputFullName.showInvalid("Please fill full name");
       isValid = false;
     }
 
     const isValidTimeRange = checkPickupTimeValid(date_dropoff, time_dropoff, date_pickup, time_pickup)
     if (!isValidTimeRange) {
-      this.warningAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
-      this.warningAlert.show();
+      this.CommonAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
+      this.CommonAlert.show('warning');
       isValid = false;
     }
 
-    if(isValid) this.alert.show()
+    if (isValid) this.alert.show()
 
   }
 
@@ -213,16 +215,16 @@ class AddNewBooking extends React.Component {
 
     return (
       <div className="wrap-add-booking">
-        <Pricing 
+        <Pricing
           ref={instance => this.pricing = instance}
         />
-        <WarningAlert 
-          ref={instance => this.warningAlert = instance}
+        <CommonAlert
+          ref={instance => this.CommonAlert = instance}
         />
         <ImageViewer
           ref={instance => this.imageViewer = instance}
         />
-        <WhaleloAlert
+        {/* <WhaleloAlert
           ref={instance => this.alertBookingSuccess = instance}
           header="New booking"
           confirmText="OK"
@@ -239,7 +241,7 @@ class AddNewBooking extends React.Component {
           onConfirm={() => { return }}
         >
           <span>Occurs an error when create new booking. Please try again!</span>
-        </WhaleloAlert>
+        </WhaleloAlert> */}
 
         <WhaleloAlert
           ref={instance => this.alert = instance}

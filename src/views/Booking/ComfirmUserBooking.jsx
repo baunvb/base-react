@@ -6,7 +6,7 @@ import WhaleloInput from 'components/CustomInput/WhaleloInput.jsx'
 import { vndStyle, requestPrice, checkPickupTimeValid, validateEmail } from 'common/function.jsx';
 import InfoIcon from 'assets/img/wlicon/icon_info.svg';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
-import WarningAlert from 'components/Alert/WarningAlert.jsx'
+import CommonAlert from 'components/Alert/CommonAlert.jsx'
 import Pricing from "views/Booking/Pricing.jsx";
 
 import iconAddImg from 'assets/img/wlicon/icon_add_img.png';
@@ -65,8 +65,8 @@ class ComfirmUserBooking extends React.Component {
       const pick_up_time = `${DatePickup.getMonth() + 1}/${DatePickup.getDate()}/${DatePickup.getFullYear()} ${TimePickup.getHours()}:${TimePickup.getMinutes()}`;
       const isValidTimeRange = checkPickupTimeValid(date_dropoff, time_dropoff, date_pickup, time_pickup)
       if (!isValidTimeRange) {
-        this.warningAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
-        this.warningAlert.show();
+        this.CommonAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
+        this.CommonAlert.show('warning');
         return;
       }
       const dataPrice = {
@@ -121,9 +121,11 @@ class ComfirmUserBooking extends React.Component {
     requestApi.postByToken(API.REQUEST_COMFIRM_APPOINTMENT, dataConfirm, (res) => {
       console.log("Res", res);
       if (res.code === 200) {
-        this.alertConfirmSuccess.show();
+        this.CommonAlert.updateState("content", <span>Your booking was confirmed successfully!</span>);
+        this.CommonAlert.show('success');
       } else {
-        this.alertConfirmFalse.show();
+        this.CommonAlert.updateState("content", <span>Occured error when confirm this booking. Please try again!</span>);
+        this.CommonAlert.show('warning');
       }
     })
   }
@@ -179,8 +181,8 @@ class ComfirmUserBooking extends React.Component {
 
     const isValidTimeRange = checkPickupTimeValid(date_dropoff, time_dropoff, date_pickup, time_pickup)
     if (!isValidTimeRange) {
-      this.warningAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
-      this.warningAlert.show();
+      this.CommonAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
+      this.CommonAlert.show('warning');
       isValid = false;
     }
 
@@ -202,13 +204,13 @@ class ComfirmUserBooking extends React.Component {
         <Pricing
           ref={instance => this.pricing = instance}
         />
-        <WarningAlert
-          ref={instance => this.warningAlert = instance}
+        <CommonAlert
+          ref={instance => this.CommonAlert = instance}
         />
         <ImageViewer
           ref={instance => this.imageViewer = instance}
         />
-        <WhaleloAlert
+        {/* <WhaleloAlert
           ref={instance => this.alertConfirmSuccess = instance}
           header="Confirm booking"
           showCancel={false}
@@ -225,8 +227,8 @@ class ComfirmUserBooking extends React.Component {
           confirmText="OK"
           onConfirm={() => { return }}
         >
-          <span>Occured error when confirm this booking. Please try again!</span>
-        </WhaleloAlert>
+          <span>Occured error when confirm this booking. Please try again! </span>
+        </WhaleloAlert> */}
         <WhaleloAlert
           ref={instance => this.alert = instance}
           header="Complete booking"

@@ -1,11 +1,17 @@
 import React from 'react';
 import 'components/Alert/whaleloalert.css';
-class WarningAlert extends React.Component {
+const TYPE = {
+  SUCCESS: 'success',
+  FALSE: 'false',
+  WARNING: 'warning'
+}
+class CommonAlert extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       show: false,
       content: null,
+      type: TYPE.SUCCESS
     }
 
   }
@@ -19,9 +25,10 @@ class WarningAlert extends React.Component {
 
   }
 
-  show = () => {
+  show = (type) => {
     this.setState({
-      show: true
+      show: true,
+      type:type
     })
   }
 
@@ -32,8 +39,20 @@ class WarningAlert extends React.Component {
   }
 
   render() {
-    const { children, header, confirmText} = this.props;
-    const { show,content } = this.state;
+    const { children, confirmText} = this.props;
+    const { show, content, type } = this.state;
+    var header = '';
+    switch(type){
+      case TYPE.SUCCESS:
+          header = "Success";
+          break;
+      case TYPE.WARNING:
+          header = "Warning";
+          break;
+      default:
+          header = "Err";
+          break;
+    }
     return (
       show && <div className="over-alert">
         <div className="whalelo-alert">
@@ -60,9 +79,9 @@ class WarningAlert extends React.Component {
 
 }
 
-WarningAlert.defaultProps = {
+CommonAlert.defaultProps = {
   header: "Warning",
   confirmText: "OK"
 }
 
-export default WarningAlert
+export default CommonAlert

@@ -14,7 +14,9 @@ import { connect } from 'react-redux'
 import { USER_ACTION } from 'actions/UserActions.js'
 import Resizer from 'react-image-file-resizer';
 import IconCamera from 'assets/img/wlicon/icon_camera.png';
-import {BASE_URL_IMG} from 'config/host'
+import { BASE_URL_IMG } from 'config/host'
+import CommonAlert from 'components/Alert/CommonAlert.jsx'
+
 class UserProfile extends React.Component {
     constructor(props) {
         super(props);
@@ -53,9 +55,11 @@ class UserProfile extends React.Component {
             })
             requestApi.postByToken(API.CHANGE_PASSWORD, { old_password: old_password, new_password: new_password }, (res) => {
                 if (res.code === 200) {
-                    this.updatePassSuccess.show();
+                    this.CommonAlert.updateState("content", <span>Update password successfully!</span>);
+                    this.CommonAlert.show('success');
                 } else {
-                    this.updatePassFalse.show()
+                    this.CommonAlert.updateState("content", <span>Occurs an error when update password. Please try again!</span>);
+                    this.CommonAlert.show('warning');
                 }
             })
         }
@@ -66,11 +70,11 @@ class UserProfile extends React.Component {
         const { edit_name, edit_phoneNumber } = this.state;
         requestApi.postByToken(API.UPDATE_INFO, { name: edit_name, phone_number: edit_phoneNumber }, (res) => {
             if (res.code === 200) {
-                this.updateProfileSuccess.show();
-                this.props.updateState(USER_ACTION.UPDATE_INFO, { name: edit_name, phone_number: edit_phoneNumber })
-
+                this.CommonAlert.updateState("content", <span>Update profile successfully!</span>);
+                this.CommonAlert.show('success');
             } else {
-                this.updateProfileFalse.show()
+                this.CommonAlert.updateState("content", <span>Occurs an error when update profile. Please try again!</span>);
+                this.CommonAlert.show('warning');
             }
         })
 
@@ -89,11 +93,11 @@ class UserProfile extends React.Component {
 
     componentDidMount() {
         console.log("componentDidMount", this.props.profile)
-        
+
     }
 
-    componentDidUpdate(prevProp, prevState){
-        if(prevProp.profile !== this.props.profile){
+    componentDidUpdate(prevProp, prevState) {
+        if (prevProp.profile !== this.props.profile) {
             this.setState({
                 edit_name: this.props.profile.name,
                 edit_phoneNumber: this.props.profile.phone_number
@@ -130,9 +134,9 @@ class UserProfile extends React.Component {
             80,
             0,
             uri => {
-                requestApi.postByToken(API.UPDATE_AVATAR, {avatar: uri}, (res) => {
+                requestApi.postByToken(API.UPDATE_AVATAR, { avatar: uri }, (res) => {
                     console.log("UPDATE_AVATAR", res.data.avatar)
-                    if(res.code === 200){
+                    if (res.code === 200) {
                         var imgUrl = res.data.avatar;
                         this.props.updateState(USER_ACTION.UPDATE_AVATAR, imgUrl)
 
@@ -140,14 +144,14 @@ class UserProfile extends React.Component {
                 })
             },
             'base64'
-          );
+        );
         let reader = new FileReader();
         reader.onloadend = () => {
-        
-        //request update avatar
-          this.setState((prevState) => ({
-            avatar: reader.result
-          }));
+
+            //request update avatar
+            this.setState((prevState) => ({
+                avatar: reader.result
+            }));
         };
         reader.readAsDataURL(file);
     }
@@ -161,7 +165,10 @@ class UserProfile extends React.Component {
     render() {
         return (
             <div className="main-profile">
-                <WhaleloAlert
+                <CommonAlert
+                    ref={instance => this.CommonAlert = instance}
+                />
+                {/* <WhaleloAlert
                     ref={instance => this.updatePassSuccess = instance}
                     header="Change password"
                     confirmText="OK"
@@ -196,7 +203,7 @@ class UserProfile extends React.Component {
                     onConfirm={() => { return }}
                 >
                     <span>Occurs an error when update profile. Please try again!</span>
-                </WhaleloAlert>
+                </WhaleloAlert> */}
                 <WhaleloAlert
                     ref={instance => this.alertEditProfile = instance}
                     header="Edit profile"
@@ -249,7 +256,7 @@ class UserProfile extends React.Component {
                         <img className="img-avatar" src={BASE_URL_IMG + this.props.profile.avatar} onError={this.onErrorImage} />
                         <img className="avatar-border" src={AvatarBorder} />
                         {
-                            this.state.isSelectAble && <img className="icon-camera" src={IconCamera}/>
+                            this.state.isSelectAble && <img className="icon-camera" src={IconCamera} />
                         }
                         <input placeholder="Update avatar" className="input-update-avatar" type="file" accept="image/*"
                             onChange={e => this.onSelectAvatar(e)}
@@ -260,7 +267,7 @@ class UserProfile extends React.Component {
                                 })
                             }}
                         ></input>
-                        
+
                     </div>
                     <span className="username">{this.props.profile.name}</span>
                     <span className="email">{this.props.profile.email}</span>
