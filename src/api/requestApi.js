@@ -1,7 +1,7 @@
 import axios from "axios";
 import { host } from "config/host";
 import { sessionService } from "redux-react-session";
-import { API } from 'config/Constant.js'
+import { API, COOKIE_KEY } from 'config/Constant.js'
 import { getCookie } from 'common/function.jsx'
 const AGENT = "Bearer "
 
@@ -27,7 +27,7 @@ export const getRequest = (api, fn) => {
 
 export const postByToken = (api, data, fn) => {
     var contentType = "application/json";
-    const token_id = getCookie("token");
+    const token_id = getCookie(COOKIE_KEY.TOKEN);
     axios.post(`${host}${api}`, data, {
         headers: {
             "Content-Type": contentType,
@@ -47,7 +47,7 @@ export const postByToken = (api, data, fn) => {
 }
 
 export const getByToken = (api, fn) => {
-    const token_id = getCookie("token");
+    const token_id = getCookie(COOKIE_KEY.TOKEN);
     axios.get(`${host}${api}`, {
         headers: {
             "Content-Type": "application/json",

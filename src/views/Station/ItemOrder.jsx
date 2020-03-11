@@ -36,7 +36,7 @@ class ItemOrder extends React.Component {
 
   render(){
     const {item} = this.props;
-    const DateTime = normalizeDateTime(item.drop_off_time);
+    const DateTime = normalizeDateTime(this.props.time);
     return (
       <div className="wrap-item-order"
         onClick={this.openDetailScreen}

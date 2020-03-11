@@ -1,9 +1,7 @@
 import React from 'react';
 import Chart from 'views/Dashboard/Chart.jsx';
 import PriceContent from 'views/Dashboard/PriceContent.jsx';
-import TableList from 'views/Dashboard/TableList.jsx';
-import ItemGrid from "components/Grid/ItemGrid.jsx";
-
+import ListBookingReport from './ListBookingReport';
 class DetailReport extends React.Component {
   constructor(props) {
     super(props);
@@ -21,11 +19,8 @@ class DetailReport extends React.Component {
           {...this.props}
         />
         <PriceContent datapoint={this.props.datapoint} />
-        {/* <ItemGrid xs={12} sm={12} md={12}>
-          <TableList 
-            
-          />
-        </ItemGrid> */}
+
+        <ListBookingReport {...this.props} data={this.props.listData}/>
       </div>
     )
   }

@@ -7,16 +7,8 @@ import withStyles from "material-ui/styles/withStyles";
 import AppBar from "material-ui/AppBar";
 import Toolbar from "material-ui/Toolbar";
 import IconButton from "material-ui/IconButton";
-import Button from "material-ui/Button";
 import Hidden from "material-ui/Hidden";
-
-// material-ui icons
 import Menu from "material-ui-icons/Menu";
-import MoreVert from "material-ui-icons/MoreVert";
-import ViewList from "material-ui-icons/ViewList";
-
-// core components
-import CustomIconButton from "components/CustomButtons/IconButton.jsx";
 
 import headerStyle from "assets/jss/components/headerStyle.jsx";
 import ToolbarIcon from "assets/img/wlicon/logo_toolbar.svg"

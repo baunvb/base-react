@@ -3,6 +3,7 @@ import { API } from 'config/Constant';
 import axios from "axios";
 import { host } from "config/host";
 import { sessionService, sessionReducer } from 'redux-react-session';
+const DAY_IN_S = 86400;
 
 export const vndStyle = (vnd) => {
     if (vnd === undefined || vnd === "" || vnd === null) {
@@ -14,7 +15,6 @@ export const vndStyle = (vnd) => {
 export const vndStyleNumber = (vnd) => {
     return vnd.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
-
 
 export const vndRound = (vnd) => {
     return Math.round(vnd / 1000) * 1000;
@@ -120,4 +120,8 @@ export const getCookie = (cname) => {
       }
     }
     return "";
+  }
+
+  export const setCookie = (key, value, day) => {
+    document.cookie = `${key}=${value}; max-age=${day * DAY_IN_S}`;
   }

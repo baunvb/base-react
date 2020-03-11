@@ -3,9 +3,11 @@ import { Bar } from 'react-chartjs-2';
 import { vndStyle } from "common/function.jsx"
 import KeyboardArrowLeft from "../../assets/img/wlicon/previous.svg";
 import KeyboardArrowRight from "../../assets/img/wlicon/next.svg";
-import IconButton from "components/CustomButtons/IconButton.jsx";
+import * as requestApi from '../../api/requestApi';
 import { REPORT_ACTION } from '../../actions/ReportActions.js';
-import { REPORT_TYPE } from '../../config/Constant'
+import { REPORT_TYPE, API } from '../../config/Constant';
+import Circle from 'components/Progress/Circle'
+
 import './chart.css'
 const options = {
     event: "click",
@@ -111,17 +113,60 @@ class Chart extends React.Component {
         }
     }
 
+    fetchListComplete = (type, index) => {
+        this.loadding.show()
+        let { chartData } = this.props;
+        let dateStr = chartData.labels[index]; //format dd\mm\yyyy
+        let dateElement = dateStr.split('/');
+        var body = {}
+        var fetchAction;
+        switch (type) {
+            case REPORT_ACTION.UPDATE_ACTIVE_INDEX_DAY:
+                body.type = REPORT_TYPE.DAY;
+                body.year = parseInt(dateElement[2]);
+                body.month = parseInt(dateElement[1]);
+                body.day = parseInt(dateElement[0]);
+                fetchAction = REPORT_ACTION.FETCH_LIST_COMPLETE_DAY
+                break;
+            case REPORT_ACTION.UPDATE_ACTIVE_INDEX_MONTH:
+                body.type = REPORT_TYPE.MONTH;
+                body.year = parseInt(dateElement[1]);
+                body.month = parseInt(dateElement[0]);
+                fetchAction = REPORT_ACTION.FETCH_LIST_COMPLETE_MONTH
+                break;
+            case REPORT_ACTION.UPDATE_ACTIVE_INDEX_YEAR:
+                body.type = REPORT_TYPE.YEAR;
+                body.year = parseInt(dateElement[0]);
+                fetchAction = REPORT_ACTION.FETCH_LIST_COMPLETE_YEAR
+                break;
+        }
+
+        requestApi.postByToken(API.FETCH_LIST_COMPLETE, body, (res) => {
+            if (res.code === 200) {
+                this.props.updateState(fetchAction, res.data.appointments);
+                var self = this;
+                setTimeout(function () {
+                    self.loading.hide()
+                }, 500)
+            }
+        })
+    }
+
     onElementsClick = (index) => {
         console.log("onElementsClick", index);
         switch (this.props.type) {
             case REPORT_TYPE.DAY:
-                this.props.updateAtiveIndex(REPORT_ACTION.UPDATE_ACTIVE_INDEX_DAY, index)
+                this.props.updateAtiveIndex(REPORT_ACTION.UPDATE_ACTIVE_INDEX_DAY, index);
+                this.fetchListComplete(REPORT_ACTION.UPDATE_ACTIVE_INDEX_DAY, index)
                 break;
             case REPORT_TYPE.MONTH:
                 this.props.updateAtiveIndex(REPORT_ACTION.UPDATE_ACTIVE_INDEX_MONTH, index)
+                this.fetchListComplete(REPORT_ACTION.UPDATE_ACTIVE_INDEX_MONTH, index)
                 break;
             case REPORT_TYPE.YEAR:
                 this.props.updateAtiveIndex(REPORT_ACTION.UPDATE_ACTIVE_INDEX_YEAR, index)
+                this.fetchListComplete(REPORT_ACTION.UPDATE_ACTIVE_INDEX_YEAR, index)
+
                 break;
             default:
                 break;
@@ -132,16 +177,18 @@ class Chart extends React.Component {
 
         return (
             <div>
-                <Bar data={this.props.chartData} options={options}
-                    style={{ width: "100px", height: "200px" }}
-                    height={200}
-                    onElementsClick={element => {
-                        if (element.length !== 0) {
-                            let index = element[0]._index;
-                            this.onElementsClick(index);
-                        }
-                    }}
-                />
+                <Circle ref={ref => this.loadding = ref} />
+                <div className="chart-container">
+                    <Bar data={this.props.chartData} options={options}
+                        height={200}
+                        onElementsClick={element => {
+                            if (element.length !== 0) {
+                                let index = element[0]._index;
+                                this.onElementsClick(index);
+                            }
+                        }}
+                    />
+                </div>
                 <div className="navigate">
                     <img
                         className="icon-left"

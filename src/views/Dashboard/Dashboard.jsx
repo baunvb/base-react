@@ -196,7 +196,11 @@ const mapStateToProps = (state, ownProps) => {
     dailyYear: state.report.dailyYear,
     dailyMonth: state.report.dailyMonth,
 
-    monthlyYear: state.report.monthlyYear
+    monthlyYear: state.report.monthlyYear,
+
+    listCompleteDay: state.report.listCompleteDay,
+    listCompleteMonth: state.report.listCompleteMonth,
+    listCompleteYear: state.report.listCompleteYear,
   }
 }
 const mapDispatchToProps = dispatch => {

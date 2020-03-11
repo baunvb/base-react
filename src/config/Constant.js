@@ -10,24 +10,25 @@ const RESPONSE_CODE = {
 }
 
 const API = {
-  LOGIN: "api/station/login",
-  BOOKING_LIST: "api/station/bookedlist",
-  CONFIRMED_LIST: "api/station/confirmedlist",
-  COMPLETED_LIST: "api/station/completedlist",
-  REQUEST_COMPLETE: "api/station/complete",
-  REQUEST_COMFIRM_APPOINTMENT: "api/station/confirm",
-  CHANGE_PASSWORD: "api/station/changepassword",
-  RESET_PASSWORD: "api/station/resetpassword",
-  GET_INFO: "api/station/info",
-  NEW_BOOK: "api/station/newbook",
+  LOGIN: "api/receptionist/login",
+  BOOKING_LIST: "api/receptionist/bookedlist",
+  CONFIRMED_LIST: "api/receptionist/confirmedlist",
+  COMPLETED_LIST: "api/receptionist/completedlist",
+  REQUEST_COMPLETE: "api/receptionist/complete",
+  REQUEST_COMFIRM_APPOINTMENT: "api/receptionist/confirm",
+  CHANGE_PASSWORD: "api/receptionist/changepassword",
+  RESET_PASSWORD: "api/receptionist/resetpassword",
+  GET_INFO: "api/receptionist/stationinfo",
+  NEW_BOOK: "api/receptionist/newbook",
 
-  UPDATE_INFO: "api/station/updateinfo",
-  UPDATE_AVATAR: "api/station/updateavatar",
+  UPDATE_INFO: "api/receptionist/updateinfo",
+  UPDATE_AVATAR: "api/receptionist/updateavatar",
   REQUEST_PRICE: 'api/enduser/price',
   
   GET_PRICING: 'price/pricelist',
 
-  FETCH_REPORT: 'api/station/dashboard',
+  FETCH_REPORT: 'api/receptionist/stationdashboard',
+  FETCH_LIST_COMPLETE: 'api/receptionist/allappointment'
 
 }
 
@@ -120,4 +121,8 @@ const REPORT_TYPE = {
   YEAR: "year"
 }
 
-export { STORAGE_STATUS, API, RESPONSE_CODE, ITEMS, REPORT_TYPE, ITEMS_MONTH, ITEMS_YEAR }
+const COOKIE_KEY = {
+  TOKEN: "TOKEN"
+}
+
+export { STORAGE_STATUS, API, RESPONSE_CODE, ITEMS, REPORT_TYPE, ITEMS_MONTH, ITEMS_YEAR, COOKIE_KEY }

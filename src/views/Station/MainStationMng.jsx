@@ -8,6 +8,7 @@ import "views/Station/station.css"
 import AppointmentMng from "views/Station/AppointmentMng.jsx";
 import ConfirmBookingMng from "views/Station/ConfirmBookingMng.jsx";
 import CompleteBookingMng from "views/Station/CompleteBookingMng.jsx";
+import Circle from 'components/Progress/Circle'
 
 import { API } from 'config/Constant.js'
 import * as requestApi from 'api/requestApi.js';
@@ -75,6 +76,11 @@ class MainStationMng extends React.Component {
         this.props.updateState(STORAGE_ACTION.PRICING_LIST, res);
       }
     })
+    var self = this;
+    setTimeout(function () {
+      self.props.updateState(STORAGE_ACTION.IS_LOAD_DONE);
+    }, 500)
+
   }
 
   render() {
@@ -82,8 +88,11 @@ class MainStationMng extends React.Component {
 
     return (
       <JssProvider generateClassName={generateClassName}>
-
         <div className="wrap-tab">
+          {
+            !this.props.isLoadDone &&
+            <Circle show={true}/>
+          }
           <JssProvider generateClassName={generateClassName}>
 
             <AppBar position="static" color="#FFFFFF" classes={{ root: "app-bar" }}>
@@ -144,7 +153,8 @@ const mapStateToProps = (state, ownProps) => {
     tabIndex: state.storage.tab,
     bookingList: state.storage.bookingList,
     confirmList: state.storage.confirmList,
-    completeList: state.storage.completeList
+    completeList: state.storage.completeList,
+    isLoadDone: state.storage.isLoadDone
   }
 }
 

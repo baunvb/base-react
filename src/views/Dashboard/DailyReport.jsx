@@ -69,6 +69,7 @@ class DailyReport extends React.Component {
         <DetailReport
           {...this.props}
           chartData={chartData}
+          listData={this.props.listCompleteDay}
           datapoint={this.props.summaryDay}
         />
       </div>

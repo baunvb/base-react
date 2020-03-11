@@ -14,7 +14,7 @@ import ListItemIcon from "material-ui/List/ListItemIcon";
 import ListItemText from "material-ui/List/ListItemText";
 import Hidden from "material-ui/Hidden";
 import Collapse from "material-ui/transitions/Collapse";
-import IconWL from "assets/img/wlicon/icon_wl_sidebar.png";
+import IconWL from "assets/img/wlicon/icon_wl_sidebar.svg";
 import { connect } from 'react-redux'
 
 
@@ -91,7 +91,6 @@ class Sidebar extends React.Component {
     st[collapse] = !this.state[collapse];
     this.setState(st);
   }
-
 
   componentDidMount() {
     //get User profile

@@ -34,6 +34,7 @@ class CompleteBookingMng extends React.Component {
             if(item.guest_name.toLowerCase().includes(this.state.searchStr.toLowerCase()))
             return (
               <ItemOrder
+                time={item.drop_off_time}
                 item={item}
                 key={key}
                 type={STORAGE_STATUS.COMPLETE}

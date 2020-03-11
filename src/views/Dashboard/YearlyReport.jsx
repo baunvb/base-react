@@ -25,6 +25,7 @@ class YearlyReport extends React.Component {
         <DetailReport
           {...this.props}
           chartData={chartData}
+          listData={this.props.listCompleteYear}
           datapoint={this.props.summaryYear}
 
         />

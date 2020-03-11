@@ -12,7 +12,8 @@ var currentState = {
     hourly_rates: [],
     daily_rates: []
   },
-  tab: 0
+  tab: 0,
+  isLoadDone: false
 }
 
 function StorageReducer(state = currentState, action) {
@@ -45,6 +46,11 @@ function StorageReducer(state = currentState, action) {
       return {
         ...state,
         tab: action.data
+      }
+    case STORAGE_ACTION.IS_LOAD_DONE:
+      return {
+        ...state,
+        isLoadDone: true
       }
     default:
       return { ...state }

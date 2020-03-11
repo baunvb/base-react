@@ -9,7 +9,7 @@ import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
 import CommonAlert from 'components/Alert/CommonAlert.jsx'
 import Pricing from "views/Booking/Pricing.jsx";
 
-import iconAddImg from 'assets/img/wlicon/icon_add_img.png';
+import iconAddImg from 'assets/img/wlicon/icon_add_img.svg';
 import * as requestApi from 'api/requestApi.js';
 import { ITEMS, API } from 'config/Constant' //REQUEST_COMFIRM_APPOINTMENT
 import ImageViewer from '../../components/ImageViewer/ImageViewer';

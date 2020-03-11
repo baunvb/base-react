@@ -18,7 +18,7 @@ import GridContainer from "components/Grid/GridContainer.jsx";
 import ItemGrid from "components/Grid/ItemGrid.jsx";
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName } from '@material-ui/core/styles';
-
+import Circle from '../components/Progress/Circle'
 const generateClassName = createGenerateClassName({
   //dangerouslyUseGlobalCSS: true,
   productionPrefix: 'dashboardx',
@@ -94,6 +94,7 @@ class Dashboard extends React.Component {
       });
     return (
       <div className={classes.wrapper}>
+
         <JssProvider generateClassName={generateClassName}>
 
           <Sidebar
@@ -118,7 +119,6 @@ class Dashboard extends React.Component {
             />
           </JssProvider>
 
-          {/* On the /maps/full-screen-maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
           <GridContainer justify="center">
             <ItemGrid sm={12} xs={12} lg={6} md={6}>
               {this.getRoute() ? (

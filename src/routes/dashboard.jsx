@@ -8,6 +8,9 @@ import DetailBooking from "views/Booking/DetailBooking";
 
 import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
 import UserProfile from "views/Profile/UserProfile.jsx"
+
+import AddStation from '../views/Admin/AddStation'
+
 var dashRoutes = [
   {
     path: "/home",
@@ -56,6 +59,17 @@ var dashRoutes = [
     component: UserProfile,
     icon: null
   },
+
+  //page for addmin
+  {
+    hide: true,
+    path: "/admin/addstation",
+    name: "",
+    component: AddStation,
+    icon: null
+  },
+
+
   { redirect: true, path: "/", pathTo: "/home", name: "" },
 
 ];

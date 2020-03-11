@@ -1,59 +1,42 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
+import './loading.css'
 class Circle extends React.Component {
-  state = {
-    completed: 0,
-    display: "none"
-  };
 
-  componentDidMount() {
-    this.timer = setInterval(this.progress, 20);
+  constructor(props) {
+    super(props);
+    this.state = {
+      isShow: this.props.show
+    }
   }
 
-  componentWillUnmount() {
-    clearInterval(this.timer);
-  }
-
-  setHidden = (value) => {
+  show = () => {
     this.setState({
-      display: value
+      isShow: true
     })
   }
 
-  progress = () => {
-    const { completed } = this.state;
-    this.setState({ completed: completed >= 100 ? 0 : completed + 1 });
-  };
+  hide = () => {
+    this.setState({
+      isShow: false
+    })
+  }
 
   render() {
-    const { classes } = this.props;
-    return (
-      <div style={
-        { 
-          display: this.state.display,
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: "100%",
-          height: "100%",
-          borderRadius: "50%",
-          background: "#494949",
-          opacity: "0.6"
+    const { isShow } = this.state
+   if (!isShow) return null
 
-        }
-      }>
-        <CircularProgress
-          variant="determinate"
-          value={this.state.completed}
-        />
+    return (
+      <div className="wrap-loading">
+        <div className="loading">
+          <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
       </div>
     );
   }
 }
 
-Circle.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+Circle.defaultProps = {
+  show: false
+}
 
 export default Circle;

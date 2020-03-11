@@ -38,7 +38,7 @@ const containerFluid = {
 "@media (min-width: 320px) and (max-width: 767px)": {
   paddingRight: "0px",
   paddingLeft: "0px",
-  overflow: "hidden"
+  overflow: "auto"
 },
 
   "&:before,&:after": {

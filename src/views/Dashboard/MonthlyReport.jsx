@@ -51,6 +51,7 @@ class MonthlyReport extends React.Component {
         <DetailReport
           {...this.props}
           chartData={chartData}
+          listData={this.props.listCompleteMonth}
           datapoint={this.props.summaryMonth}
 
         />

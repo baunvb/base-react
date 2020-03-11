@@ -2,7 +2,7 @@ import React from 'react';
 import 'views/Booking/booking.css';
 import WhaleloInput from 'components/CustomInput/WhaleloInput.jsx';
 import { vndStyle } from 'common/function.jsx';
-import iconAddImg from 'assets/img/wlicon/icon_add_img.png';
+import iconAddImg from 'assets/img/wlicon/icon_add_img.svg';
 import InfoIcon from 'assets/img/wlicon/icon_info.svg';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
 import CommonAlert from 'components/Alert/CommonAlert.jsx'
@@ -13,8 +13,11 @@ import * as requestApi from 'api/requestApi';
 import Resizer from 'react-image-file-resizer';
 import ImageViewer from '../../components/ImageViewer/ImageViewer';
 import Pricing from "views/Booking/Pricing.jsx";
+import Circle from 'components/Progress/Circle'
+
+
 mobiscroll.settings = {
-  theme: 'android' /* set global theme */
+  theme: 'ios' /* set global theme */
 }
 
 const date = new Date();
@@ -106,7 +109,7 @@ class AddNewBooking extends React.Component {
   }
 
   onConfirm = () => {
-    console.log("Data", this.state)
+    this.loadding.show()
     const { date_dropoff, time_dropoff, date_pickup, time_pickup, email, fullname, item_count, imgFiles } = this.state;
     const DateDropoff = new Date(date_dropoff);
     const TimeDropoff = new Date(time_dropoff);
@@ -125,6 +128,7 @@ class AddNewBooking extends React.Component {
     console.log("dataBooking", dataBooking)
 
     requestApi.postByToken(API.NEW_BOOK, dataBooking, (res) => {
+      this.loadding.hide()
       console.log("Request booking", res)
       if (res.code === 200) {
         this.CommonAlert.updateState("content", <span>You have create new booking successfully!</span>);
@@ -212,36 +216,19 @@ class AddNewBooking extends React.Component {
   }
 
   render() {
-
     return (
       <div className="wrap-add-booking">
         <Pricing
           ref={instance => this.pricing = instance}
         />
+        <Circle ref={ref => this.loadding = ref} />
+
         <CommonAlert
           ref={instance => this.CommonAlert = instance}
         />
         <ImageViewer
           ref={instance => this.imageViewer = instance}
         />
-        {/* <WhaleloAlert
-          ref={instance => this.alertBookingSuccess = instance}
-          header="New booking"
-          confirmText="OK"
-          showCancel={false}
-          onConfirm={() => this.props.history.go(-1)}
-        >
-          <span>You have create new booking successfully!</span>
-        </WhaleloAlert>
-        <WhaleloAlert
-          ref={instance => this.alertBookingFalse = instance}
-          header="New booking"
-          confirmText="OK"
-          showCancel={false}
-          onConfirm={() => { return }}
-        >
-          <span>Occurs an error when create new booking. Please try again!</span>
-        </WhaleloAlert> */}
 
         <WhaleloAlert
           ref={instance => this.alert = instance}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import * as requestApi from 'api/requestApi';
 import { sessionService } from "redux-react-session";
 
-import { validateEmail } from "common/function.jsx";
+import { validateEmail , setCookie} from "common/function.jsx";
 import "./login.css";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -25,7 +25,7 @@ import loginPageStyle from "assets/jss/views/loginPageStyle.jsx";
 
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName } from '@material-ui/core/styles';
-import { API, RESPONSE_CODE } from 'config/Constant.js'
+import { API, COOKIE_KEY } from 'config/Constant.js'
 
 const generateClassName = createGenerateClassName({
     dangerouslyUseGlobalCSS: true,
@@ -78,10 +78,11 @@ class LoginPage extends Component {
                 var responseLogin = await axios.post(`${host}${API.LOGIN}`, user);
                 console.log("responseLogin", responseLogin);
                 if (responseLogin.data.code === 200) {
-                    const token = responseLogin.data.data.station.token;
+                    const token = responseLogin.data.data.receptionist.token;
                     console.log("ON LOGIN", token)
                     await sessionService.saveSession({ token })
-                    document.cookie = `token=${token}`;
+                    setCookie(COOKIE_KEY.TOKEN, token, 30);
+                    //document.cookie = `${COOKIE_KEY.TOKEN}=${token}; max-age=${30 * 24 * 60 * 60 * 1000}`;
                     history.push('/home');
                 }
             } catch (err) {

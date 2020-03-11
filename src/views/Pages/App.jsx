@@ -8,7 +8,9 @@ import Dashboard from "layouts/Dashboard.jsx";
 import Pages from "layouts/Pages.jsx";
 import PrivateRoute from 'views/Pages/PrivateRoute';
 
-const indexRoutes = ["/", "/home", "/addNewAppoinment", "/completebooking", "/confirmbooking", "/bookingdetail", "/profile", "/dashboard", "/login", "/forgetpassword", "/updatepassword", "/updateinfo", "/history", "/booking", "/tracking", "/booking-submit", "/confirmation"]
+const indexRoutes = ["/", "/home", "/addNewAppoinment", "/completebooking", "/confirmbooking", "/bookingdetail", "/profile", "/dashboard", "/login", "/forgetpassword", "/updatepassword", "/updateinfo", "/history", "/booking", "/tracking", "/booking-submit", "/confirmation",
+  "/admin/addstation"
+]
 const App = ({ authenticated, checked }) => (
   <Router>
     {checked &&

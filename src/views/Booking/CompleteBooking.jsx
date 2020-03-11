@@ -11,12 +11,18 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
 import CommonAlert from 'components/Alert/CommonAlert.jsx'
+import ImageViewer from '../../components/ImageViewer/ImageViewer';
 
 import { vndStyle, normalizeDateTime, requestPrice, checkPickupTimeValid } from 'common/function.jsx';
 import * as requestApi from 'api/requestApi';
 import { API } from 'config/Constant';
 import { BASE_URL_IMG } from 'config/host.js';
-import ImageViewer from '../../components/ImageViewer/ImageViewer';
+import { createGenerateClassName } from '@material-ui/core/styles';
+import JssProvider from 'react-jss/lib/JssProvider';
+const generateClassName = createGenerateClassName({
+  //dangerouslyUseGlobalCSS: true,
+  productionPrefix: 'complted-book',
+});
 
 const PAYMENT_METHOD = [
   { value: "cash", label: "Pay by cash" },
@@ -168,25 +174,6 @@ class CompleteBooking extends React.Component {
         <ImageViewer
           ref={instance => this.imageViewer = instance}
         />
-        {/* <WhaleloAlert
-          ref={instance => this.alertCompleteSuccess = instance}
-          header="Complete booking"
-          showCancel={false}
-          confirmText="OK"
-          onConfirm={() => { this.props.history.go(-1) }}
-        >
-          <span>Your booking was completed successfully!</span>
-        </WhaleloAlert>
-
-        <WhaleloAlert
-          ref={instance => this.alertCompleteFalse = instance}
-          header="Complete booking"
-          showCancel={false}
-          confirmText="OK"
-          onConfirm={() => { return }}
-        >
-          <span>Occured error when complete this booking</span>
-        </WhaleloAlert> */}
 
         <WhaleloAlert
           ref={instance => this.alert = instance}
@@ -208,26 +195,29 @@ class CompleteBooking extends React.Component {
           // onCacel={this.onCancel}
           onConfirm={this.onConfirmPaymenthod}
         >
-          <FormControl fullWidth component="fieldset">
-            {/* RadioGroup value require string */}
-            <RadioGroup value={this.state.paymenthod} onChange={e => this.handleSelectPaymenthod(e)}>
-              {
-                PAYMENT_METHOD.map((prop, key) => {
-                  return (
+          <JssProvider generateClassName={generateClassName}>
 
-                    <FormControlLabel
-                      classes={{ label: "radio-btn-pay-label", root: "form-ctr-root " }}
-                      value={prop.value}
-                      control={<Radio color="secondary" classes={{ checked: "radio-btn-pay" }} />}
-                      label={prop.label}
-                      labelPlacement="start"
-                    />
-                  )
-                })
-              }
+            <FormControl fullWidth component="fieldset">
+              {/* RadioGroup value require string */}
+              <RadioGroup value={this.state.paymenthod} onChange={e => this.handleSelectPaymenthod(e)}>
+                {
+                  PAYMENT_METHOD.map((prop, key) => {
+                    return (
 
-            </RadioGroup>
-          </FormControl>
+                      <FormControlLabel
+                        classes={{ label: "radio-btn-pay-label", root: "form-ctr-root " }}
+                        value={prop.value}
+                        control={<Radio color="secondary" classes={{ checked: "radio-btn-pay" }} />}
+                        label={prop.label}
+                        labelPlacement="start"
+                      />
+                    )
+                  })
+                }
+
+              </RadioGroup>
+            </FormControl>
+          </JssProvider>
         </WhaleloAlert>
 
         <div className="booking-title">

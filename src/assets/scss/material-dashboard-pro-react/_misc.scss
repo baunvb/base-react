@@ -5,6 +5,7 @@ html * {
 }
 body {
     background-color: #EEEEEE;
+    overflow: hidden;
     color: #3C4858;
     margin: 0;
     font-family: Roboto, Helvetica, Arial, sans-serif;
@@ -60,6 +61,7 @@ p {
 }
 
 body {
+    overflow: hidden;
     background-color: #FFF;
     color: #3C4858;
     font-size: 14px;
@@ -174,6 +176,7 @@ hr {
 @media (max-width: 991px) {
     body,
     html {
+        overflow: hidden;
         position: relative;
         overflow-x: hidden;
     }

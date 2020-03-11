@@ -1,6 +1,6 @@
 import React from 'react';
 import 'components/CustomInput/whaleloinput.css';
-import iconSelect from 'assets/img/wlicon/icon_select.png';
+import iconSelect from 'assets/img/wlicon/icon_select.svg';
 import mobiscroll from '@mobiscroll/react';
 mobiscroll.settings = {
   theme: 'ios' /* set global theme */
@@ -34,7 +34,7 @@ class WhaleloInput extends React.PureComponent {
 
 
   render() {
-    const { name, label, selectAble, type, value, icon } = this.props;
+    const { name, label, selectAble, type, value, icon, id } = this.props;
     const {invalidText} = this.state;
     console.log("Rerender" + name)
 
@@ -48,6 +48,7 @@ class WhaleloInput extends React.PureComponent {
         </div>
         <div className="wrap-input">
           <input
+            id={id}
             disabled={type !== "text"}
             value={type != "text" ? "" : value}
             type="text"
@@ -87,7 +88,8 @@ class WhaleloInput extends React.PureComponent {
 WhaleloInput.defaultProps = {
   selectAble: false,
   type: "text",
-  icon: null
+  icon: null,
+  id: ""
 }
 
 export default WhaleloInput

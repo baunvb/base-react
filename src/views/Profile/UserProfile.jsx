@@ -9,7 +9,7 @@ import { sessionService } from 'redux-react-session';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
 import WhaleloInput from 'components/CustomInput/WhaleloInput.jsx'
 import InputPassword from 'views/Profile/InputPassword.jsx'
-import { API } from 'config/Constant.js'
+import { API, COOKIE_KEY } from 'config/Constant.js'
 import { connect } from 'react-redux'
 import { USER_ACTION } from 'actions/UserActions.js'
 import Resizer from 'react-image-file-resizer';
@@ -88,6 +88,7 @@ class UserProfile extends React.Component {
 
     logout = async () => {
         sessionService.deleteSession();
+        document.cookie = `${COOKIE_KEY.TOKEN}=`;
         this.props.history.push('/login')
     }
 
@@ -168,42 +169,6 @@ class UserProfile extends React.Component {
                 <CommonAlert
                     ref={instance => this.CommonAlert = instance}
                 />
-                {/* <WhaleloAlert
-                    ref={instance => this.updatePassSuccess = instance}
-                    header="Change password"
-                    confirmText="OK"
-                    showCancel={false}
-                    onConfirm={() => { return }}
-                >
-                    <span>Update password successfully!</span>
-                </WhaleloAlert>
-                <WhaleloAlert
-                    ref={instance => this.updatePassFalse = instance}
-                    header="Change password"
-                    confirmText="OK"
-                    showCancel={false}
-                    onConfirm={() => { return }}
-                >
-                    <span>Occurs an error when update password. Please try again!</span>
-                </WhaleloAlert>
-                <WhaleloAlert
-                    ref={instance => this.updateProfileSuccess = instance}
-                    header="Edit profile"
-                    confirmText="OK"
-                    showCancel={false}
-                    onConfirm={() => { return }}
-                >
-                    <span>Update profile successfully!</span>
-                </WhaleloAlert>
-                <WhaleloAlert
-                    ref={instance => this.updateProfileFalse = instance}
-                    header="Edit profile"
-                    confirmText="OK"
-                    showCancel={false}
-                    onConfirm={() => { return }}
-                >
-                    <span>Occurs an error when update profile. Please try again!</span>
-                </WhaleloAlert> */}
                 <WhaleloAlert
                     ref={instance => this.alertEditProfile = instance}
                     header="Edit profile"

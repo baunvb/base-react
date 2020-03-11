@@ -1,6 +1,6 @@
 import React from 'react';
 import 'views/Station/search.css';
-import iconSearch from 'assets/img/wlicon/icon_search.png';
+import iconSearch from 'assets/img/wlicon/icon_search.svg';
 
 class SearchComponent extends React.Component {
   constructor(props){

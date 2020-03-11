@@ -77,6 +77,7 @@ var currentState = {
   activeIndexDay: 0,
   dailyYear: new Date().getFullYear(),
   dailyMonth: new Date().getMonth() + 1,
+  listCompleteDay: [],
 
   totalChartDataMonth: [],
   pageIndexChartDataMonth: 0,
@@ -91,6 +92,7 @@ var currentState = {
   },
   activeIndexMonth: 0,
   monthlyYear: new Date().getFullYear(),
+  listCompleteMonth: [],
 
   totalChartDataYear: [],
   pageIndexChartDataYear: 0,
@@ -104,6 +106,8 @@ var currentState = {
     total_booking: 0
   },
   activeIndexYear: 0,
+  listCompleteYear: [],
+
 }
 
 function ReportReducer(state = currentState, action) {
@@ -280,7 +284,7 @@ function ReportReducer(state = currentState, action) {
       var colorChartYear = state.colorChartYear;
       var maxIndex = colorChartYear.length - 1;
       var clickedIndex = maxIndex - (COLUMN_PER_PAGE - 1 - action.data + state.pageIndexChartDataYear * COLUMN_PER_PAGE);
-      if (colorChartYear.length < COLUMN_PER_PAGE  || clickedIndex < 0) clickedIndex = action.data
+      if (colorChartYear.length < COLUMN_PER_PAGE || clickedIndex < 0) clickedIndex = action.data
       console.log("UPDATE_ACTIVE_INDEX_YEAR", clickedIndex)
       colorChartYear[state.activeIndexYear] = COLOR_DEFAULT
       colorChartYear[clickedIndex] = COLOR_ACTIVE
@@ -311,6 +315,22 @@ function ReportReducer(state = currentState, action) {
       return {
         ...state,
         monthlyYear: action.data
+      }
+    case REPORT_ACTION.FETCH_LIST_COMPLETE_DAY:
+      console.log("XXXXXXXXX", action.data)
+      return {
+        ...state,
+        listCompleteDay: action.data
+      }
+    case REPORT_ACTION.FETCH_LIST_COMPLETE_MONTH:
+      return {
+        ...state,
+        listCompleteMonth: action.data
+      }
+    case REPORT_ACTION.FETCH_LIST_COMPLETE_YEAR:
+      return {
+        ...state,
+        listCompleteYear: action.data
       }
     default:
       return { ...state }
