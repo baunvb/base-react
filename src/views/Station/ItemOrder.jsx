@@ -17,8 +17,8 @@ class ItemOrder extends React.Component {
   }
 
   openDetailScreen = () => {
-    const {type} = this.props;
-    switch(type) {
+    const {status} = this.props;
+    switch(status) {
       case  STORAGE_STATUS.APPOINTMENT:
         this.props.history.push({
           pathname: '/confirmBooking',

@@ -1,6 +1,7 @@
 import React from 'react';
 import 'views/Booking/completebooking.css'
 import 'views/Booking/booking.css';
+import {STORAGE_ACTION} from '../../actions/StorageActions'
 
 import WhaleloInput from 'components/CustomInput/WhaleloInput.jsx'
 import { vndStyle, requestPrice, checkPickupTimeValid, validateEmail } from 'common/function.jsx';
@@ -14,7 +15,7 @@ import * as requestApi from 'api/requestApi.js';
 import { ITEMS, API } from 'config/Constant' //REQUEST_COMFIRM_APPOINTMENT
 import ImageViewer from '../../components/ImageViewer/ImageViewer';
 import Resizer from 'react-image-file-resizer';
-
+import {connect} from 'react-redux'
 class ComfirmUserBooking extends React.Component {
   constructor(props) {
     super(props);
@@ -100,7 +101,7 @@ class ComfirmUserBooking extends React.Component {
 
   onConfirm = () => {
     const { id, time_dropoff, date_dropoff, time_pickup, date_pickup, item_count, fullname, email, imgFiles } = this.state;
-
+    this.alert.hide()
     const DateDropoff = new Date(date_dropoff);
     const TimeDropoff = new Date(time_dropoff);
     const DatePickup = new Date(date_pickup);
@@ -123,6 +124,10 @@ class ComfirmUserBooking extends React.Component {
       if (res.code === 200) {
         this.CommonAlert.updateState("content", <span>Your booking was confirmed successfully!</span>);
         this.CommonAlert.show('success');
+        setTimeout(() => {
+          this.props.history.go(-1);
+          this.props.updateState(STORAGE_ACTION.STORAGE_TAB, 1)
+        }, 1000);
       } else {
         this.CommonAlert.updateState("content", <span>Occured error when confirm this booking. Please try again!</span>);
         this.CommonAlert.show('warning');
@@ -210,25 +215,7 @@ class ComfirmUserBooking extends React.Component {
         <ImageViewer
           ref={instance => this.imageViewer = instance}
         />
-        {/* <WhaleloAlert
-          ref={instance => this.alertConfirmSuccess = instance}
-          header="Confirm booking"
-          showCancel={false}
-          confirmText="OK"
-          onConfirm={() => { this.props.history.go(-1) }}
-        >
-          <span>Your booking was confirmed successfully!</span>
-        </WhaleloAlert>
 
-        <WhaleloAlert
-          ref={instance => this.alertConfirmFalse = instance}
-          header="Confirm booking"
-          showCancel={false}
-          confirmText="OK"
-          onConfirm={() => { return }}
-        >
-          <span>Occured error when confirm this booking. Please try again! </span>
-        </WhaleloAlert> */}
         <WhaleloAlert
           ref={instance => this.alert = instance}
           header="Complete booking"
@@ -366,4 +353,10 @@ class ComfirmUserBooking extends React.Component {
 
 }
 
-export default ComfirmUserBooking
+const mapDispatchToProps = dispatch => {
+  return {
+    updateState: (type, data) => dispatch({ type, data })
+  }
+}
+
+export default connect(null, mapDispatchToProps, null, {forwardRef: true})(ComfirmUserBooking)

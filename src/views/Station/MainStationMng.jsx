@@ -34,15 +34,10 @@ class MainStationMng extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      value: props.tabIndex
-    }
   }
 
   handleChange = (event, newValue) => {
-    this.setState({
-      value: newValue
-    });
+    
     this.props.updateState(STORAGE_ACTION.STORAGE_TAB, newValue)
   };
 
@@ -84,7 +79,7 @@ class MainStationMng extends React.Component {
   }
 
   render() {
-    const { value } = this.state;
+    const { tabIndex } = this.props;
 
     return (
       <JssProvider generateClassName={generateClassName}>
@@ -98,7 +93,7 @@ class MainStationMng extends React.Component {
             <AppBar position="static" color="#FFFFFF" classes={{ root: "app-bar" }}>
               <Tabs
                 classes={{ indicator: "tab-indicator", flexContainer: "tabs-flexContainer " }}
-                value={value}
+                value={tabIndex}
                 onChange={this.handleChange}
                 indicatorColor="primary"
                 textColor="primary"
@@ -113,7 +108,7 @@ class MainStationMng extends React.Component {
           </JssProvider>
           <JssProvider generateClassName={generateClassName}>
 
-            <TabPanel value={value} index={0}>
+            <TabPanel value={tabIndex} index={0}>
               <div className="main-station">
                 <AppointmentMng {...this.props} />
               </div>
@@ -122,7 +117,7 @@ class MainStationMng extends React.Component {
           </JssProvider>
           <JssProvider generateClassName={generateClassName}>
 
-            <TabPanel value={value} index={1}>
+            <TabPanel value={tabIndex} index={1}>
               <div className="main-station">
                 <ConfirmBookingMng {...this.props} />
               </div>
@@ -130,7 +125,7 @@ class MainStationMng extends React.Component {
           </JssProvider>
           <JssProvider generateClassName={generateClassName}>
 
-            <TabPanel value={value} index={2}>
+            <TabPanel value={tabIndex} index={2}>
               <CompleteBookingMng {...this.props} />
             </TabPanel>
           </JssProvider>

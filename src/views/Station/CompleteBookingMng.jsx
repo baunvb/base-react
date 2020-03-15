@@ -37,7 +37,7 @@ class CompleteBookingMng extends React.Component {
                 time={item.drop_off_time}
                 item={item}
                 key={key}
-                type={STORAGE_STATUS.COMPLETE}
+                status={STORAGE_STATUS.COMPLETE}
                 {...this.props}
               />
             )

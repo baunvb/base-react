@@ -14,8 +14,8 @@ import Resizer from 'react-image-file-resizer';
 import ImageViewer from '../../components/ImageViewer/ImageViewer';
 import Pricing from "views/Booking/Pricing.jsx";
 import Circle from 'components/Progress/Circle'
-
-
+import {connect} from "react-redux"
+import {STORAGE_ACTION} from '../../actions/StorageActions'
 mobiscroll.settings = {
   theme: 'ios' /* set global theme */
 }
@@ -109,6 +109,7 @@ class AddNewBooking extends React.Component {
   }
 
   onConfirm = () => {
+    this.alert.hide()
     this.loadding.show()
     const { date_dropoff, time_dropoff, date_pickup, time_pickup, email, fullname, item_count, imgFiles } = this.state;
     const DateDropoff = new Date(date_dropoff);
@@ -133,13 +134,17 @@ class AddNewBooking extends React.Component {
       if (res.code === 200) {
         this.CommonAlert.updateState("content", <span>You have create new booking successfully!</span>);
         this.CommonAlert.show('success');
+        setTimeout(() => {
+          this.props.history.go(-1);
+          this.props.updateState(STORAGE_ACTION.STORAGE_TAB, 1)
+        }, 1000);
+        
       } else {
         this.CommonAlert.updateState("content", <span>Occurs an error when create new booking. Please try again!</span>);
         this.CommonAlert.show('warning');
       }
     })
 
-    this.alert.hide()
   }
 
   openImage = (src) => {
@@ -367,4 +372,10 @@ class AddNewBooking extends React.Component {
 
 }
 
-export default AddNewBooking
+const mapDispatchToProps = dispatch => {
+  return {
+    updateState: (type, data) => dispatch({ type, data })
+  }
+}
+
+export default connect(null, mapDispatchToProps, null, {forwardRef: true})(AddNewBooking)

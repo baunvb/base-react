@@ -21,7 +21,7 @@ const API = {
   GET_INFO: "api/receptionist/stationinfo",
   NEW_BOOK: "api/receptionist/newbook",
 
-  UPDATE_INFO: "api/receptionist/updateinfo",
+  UPDATE_INFO: "api/station/updateinfo",
   UPDATE_AVATAR: "api/receptionist/updateavatar",
   REQUEST_PRICE: 'api/enduser/price',
   

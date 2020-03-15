@@ -38,7 +38,7 @@ class AppointmentMng extends React.Component {
                 time={item.drop_off_time}
                 item={item}
                 key={key}
-                type={STORAGE_STATUS.APPOINTMENT}
+                status={STORAGE_STATUS.APPOINTMENT}
                 {...this.props}
               />
             )

@@ -81,7 +81,7 @@ class CommonAlert extends React.Component {
 
 CommonAlert.defaultProps = {
   header: "Warning",
-  confirmText: "OK"
+  confirmText: "OK",
 }
 
 export default CommonAlert

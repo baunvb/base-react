@@ -145,8 +145,9 @@ class Chart extends React.Component {
             if (res.code === 200) {
                 this.props.updateState(fetchAction, res.data.appointments);
                 var self = this;
+                //this.loading.hide()
                 setTimeout(function () {
-                    self.loading.hide()
+                    self.loadding.hide()
                 }, 500)
             }
         })

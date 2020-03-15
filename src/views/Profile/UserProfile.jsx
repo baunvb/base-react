@@ -1,9 +1,9 @@
 import React from 'react';
 import 'views/Profile/profile.css';
-import DefaultAvatar from 'assets/img/wlicon/avatar.png'
+import DefaultAvatar from '../../assets/img/wlicon/avatar.png'
 import AvatarBorder from 'assets/img/wlicon/avatar_border.png'
-import SettingIcon from 'assets/img/wlicon/setting.png'
-import IconPass from 'assets/img/wlicon/icon_password.png'
+import SettingIcon from 'assets/img/wlicon/setting.svg'
+import IconPass from 'assets/img/wlicon/icon_password.svg'
 import * as requestApi from 'api/requestApi';
 import { sessionService } from 'redux-react-session';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
@@ -40,16 +40,32 @@ class UserProfile extends React.Component {
     }
 
     onConfirmUpdateProfile = () => {
+        this.alertEditProfile.hide()
         this.onUpdateProfile()
+    }
+
+    checkValidPass = (pass) => {
+        if(pass === undefined) {
+            return false;
+        }
+        if (pass.length < 6 || pass === undefined || pass === null){
+            return false;
+        }
+        return true;
     }
 
     onUpdatePassword = () => {
         const { old_password, new_password, confirm_new_password } = this.state;
-        if (new_password !== confirm_new_password) {
+        if (!this.checkValidPass(old_password) || !this.checkValidPass(new_password) || !this.checkValidPass(confirm_new_password)) {
             this.setState({
-                err: <span className="text-invalid">New password isn't match</span>
+                err: <span className="text-invalid">Password at least 6 characters</span>
+            })
+        } else if (new_password !== confirm_new_password) {
+            this.setState({
+                err: <span className="text-invalid">New password does not match</span>
             })
         } else {
+            this.alertEditProfile.hide()
             this.setState({
                 err: null
             })
@@ -157,12 +173,6 @@ class UserProfile extends React.Component {
         reader.readAsDataURL(file);
     }
 
-    onErrorImage = () => {
-        this.setState({
-            avatar: DefaultAvatar
-        })
-    }
-
     render() {
         return (
             <div className="main-profile">
@@ -218,7 +228,10 @@ class UserProfile extends React.Component {
 
                 <div className="top-info">
                     <div>
-                        <img className="img-avatar" src={BASE_URL_IMG + this.props.profile.avatar} onError={this.onErrorImage} />
+                        <img className="img-avatar" src={BASE_URL_IMG + this.props.profile.avatar} onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = DefaultAvatar
+                        }} />
                         <img className="avatar-border" src={AvatarBorder} />
                         {
                             this.state.isSelectAble && <img className="icon-camera" src={IconCamera} />

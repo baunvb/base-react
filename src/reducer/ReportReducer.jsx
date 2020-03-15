@@ -63,6 +63,8 @@ const getMaxPageIndex = (length) => {
 }
 
 var currentState = {
+  tabIndex: 0,
+
   totalChartDataDay: [],
   pageIndexChartDataDay: 0,
   maxPageChartDay: 0,
@@ -112,6 +114,12 @@ var currentState = {
 
 function ReportReducer(state = currentState, action) {
   switch (action.type) {
+    case REPORT_ACTION.UPDATE_TAB_INDEX:
+      return {
+        ...state,
+        tabIndex: action.data
+      }
+
     case REPORT_ACTION.FETCH_CHART_DATA_DAY:
       var length = action.data.label.length;
       var colorChartDay = initArrColorCorespondingLengthOfData(length);

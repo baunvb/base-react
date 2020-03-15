@@ -36,15 +36,11 @@ function a11yProps(index) {
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      value: 0
-    }
+
   }
 
   handleChange = (event, newValue) => {
-    this.setState({
-      value: newValue
-    });
+    this.props.updateState(REPORT_ACTION.UPDATE_TAB_INDEX, newValue)
   };
 
   // accept array of object: {label, prices}
@@ -98,14 +94,10 @@ class Dashboard extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log("componentDidUpdate");
-    console.log(prevProps, prevState);
   }
   render() {
-    console.log("RERENDER Dashboard", this.props.showChartColorDay)
-    console.log("RERENDER Dashboard", this.props.colorChartDay)
 
-    const { value } = this.state;
+    const { tabIndex } = this.props;
     return (
       <JssProvider generateClassName={generateClassName}>
         <div className="wrap-tab">
@@ -113,7 +105,7 @@ class Dashboard extends React.Component {
             <AppBar position="static" color="#FFFFFF" classes={{ root: "app-bar" }}>
               <Tabs
                 classes={{ indicator: "tab-indicator", flexContainer: "tabs-flexContainer " }}
-                value={value}
+                value={tabIndex}
                 onChange={this.handleChange}
                 indicatorColor="primary"
                 textColor="primary"
@@ -128,7 +120,7 @@ class Dashboard extends React.Component {
           </JssProvider>
 
           <JssProvider generateClassName={generateClassName}>
-            <TabPanel value={value} index={0}>
+            <TabPanel value={tabIndex} index={0}>
               <div className="main-station">
                 <DailyReport
                   ref={ref => this.daily = ref}
@@ -144,7 +136,7 @@ class Dashboard extends React.Component {
           </JssProvider>
 
           <JssProvider generateClassName={generateClassName}>
-            <TabPanel value={value} index={1}>
+            <TabPanel value={tabIndex} index={1}>
               <div className="main-station">
                 <MonthlyReport
                   ref={ref => this.monthly = ref}
@@ -159,7 +151,7 @@ class Dashboard extends React.Component {
           </JssProvider>
 
           <JssProvider generateClassName={generateClassName}>
-            <TabPanel value={value} index={2}>
+            <TabPanel value={tabIndex} index={2}>
               <div className="main-station">
                 <YearlyReport
                   ref={ref => this.yearly = ref}
@@ -182,6 +174,7 @@ Dashboard.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   return {
+    tabIndex: state.report.tabIndex,
     showChartDataDay: state.report.showChartDataDay,
     showChartDataMonth: state.report.showChartDataMonth,
     showChartDataYear: state.report.showChartDataYear,
@@ -212,5 +205,3 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(dashboardStyle)(Dashboard));
-
-// export default connect(mapStateToProps, mapDispatchToProps)(withStyles(sidebarStyle)(Sidebar))

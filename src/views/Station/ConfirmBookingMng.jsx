@@ -38,7 +38,7 @@ class ConfirmBookingMng extends React.Component {
                   time={item.drop_off_time}
                   item={item}
                   key={key}
-                  type={STORAGE_STATUS.CONFIRM}
+                  status={STORAGE_STATUS.CONFIRM}
                   {...this.props}
                 />
               )

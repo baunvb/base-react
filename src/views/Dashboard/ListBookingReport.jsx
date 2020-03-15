@@ -18,7 +18,7 @@ class ListBookingReport extends React.Component {
                 time={item.pick_up_time}
                 item={item}
                 key={key}
-                type={STORAGE_STATUS.COMPLETE}
+                status={STORAGE_STATUS.COMPLETE}
                 {...this.props}
               />
             )

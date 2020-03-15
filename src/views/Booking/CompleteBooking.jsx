@@ -1,6 +1,7 @@
 import React from 'react';
 import 'views/Booking/completebooking.css'
 import 'views/Booking/booking.css'
+import {STORAGE_ACTION} from '../../actions/StorageActions'
 
 import WhaleloInput from 'components/CustomInput/WhaleloInput.jsx'
 import itemImage from 'assets/img/wlicon/item_img.png'
@@ -12,7 +13,7 @@ import FormControl from '@material-ui/core/FormControl';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
 import CommonAlert from 'components/Alert/CommonAlert.jsx'
 import ImageViewer from '../../components/ImageViewer/ImageViewer';
-
+import {connect} from 'react-redux';
 import { vndStyle, normalizeDateTime, requestPrice, checkPickupTimeValid } from 'common/function.jsx';
 import * as requestApi from 'api/requestApi';
 import { API } from 'config/Constant';
@@ -116,6 +117,7 @@ class CompleteBooking extends React.Component {
   }
 
   onConfirm = () => {
+    this.alert.hide()
     const { id, date_pickup, time_pickup } = this.state;
     const DatePickup = new Date(date_pickup);
     const TimePickup = new Date(time_pickup);
@@ -132,13 +134,16 @@ class CompleteBooking extends React.Component {
       if (res.code === 200) {
         this.CommonAlert.updateState("content", <span>Your booking was completed successfully!</span>);
         this.CommonAlert.show('success');
+        setTimeout(() => {
+          this.props.history.go(-1);
+          this.props.updateState(STORAGE_ACTION.STORAGE_TAB, 2)
+        }, 1000);
       } else {
         this.CommonAlert.updateState("content", <span>Occured error when complete this booking. Please try again!</span>);
         this.CommonAlert.show('warning');
       }
     })
 
-    this.alert.hide()
   }
 
   onConfirmPaymenthod = () => {
@@ -316,5 +321,10 @@ class CompleteBooking extends React.Component {
   }
 
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    updateState: (type, data) => dispatch({ type, data })
+  }
+}
 
-export default CompleteBooking
+export default connect(null, mapDispatchToProps, null, {forwardRef: true})(CompleteBooking)

@@ -50,9 +50,6 @@ class WhaleloAlert extends React.Component {
               </button>
             }
             <button className="btn-login" onClick={() => {
-              this.setState({
-                isShow: false
-              })
               onConfirm()
             }}>
               {confirmText}
