@@ -1,21 +1,21 @@
 import React from 'react';
 import 'views/Booking/booking.css';
 import WhaleloInput from 'components/CustomInput/WhaleloInput.jsx';
-import { vndStyle } from 'common/function.jsx';
+import { vndStyle, normalizeFormDataRequestPrice, validateEmail, requestPrice, checkPickupTimeValid } from 'common/function.jsx';
 import iconAddImg from 'assets/img/wlicon/icon_add_img.svg';
 import InfoIcon from 'assets/img/wlicon/icon_info.svg';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
 import CommonAlert from 'components/Alert/CommonAlert.jsx'
 import mobiscroll from '@mobiscroll/react';
 import { ITEMS, API } from 'config/Constant';
-import { validateEmail, requestPrice, checkPickupTimeValid } from "common/function.jsx";
 import * as requestApi from 'api/requestApi';
 import Resizer from 'react-image-file-resizer';
 import ImageViewer from '../../components/ImageViewer/ImageViewer';
 import Pricing from "views/Booking/Pricing.jsx";
 import Circle from 'components/Progress/Circle'
-import {connect} from "react-redux"
-import {STORAGE_ACTION} from '../../actions/StorageActions'
+import { connect } from "react-redux"
+import CircleDataLoading from '../../components/Progress/CircleDataLoading.jsx'
+import { STORAGE_ACTION } from '../../actions/StorageActions'
 mobiscroll.settings = {
   theme: 'ios' /* set global theme */
 }
@@ -31,7 +31,7 @@ class AddNewBooking extends React.Component {
       date_dropoff: date,
       time_pickup: esDate,
       date_pickup: esDate,
-      item_count: 0,
+      item_count: ITEMS[0].value,
       email: "",
       fullname: "",
       price: 0,
@@ -46,35 +46,31 @@ class AddNewBooking extends React.Component {
 
     if (prevState.item_count !== item_count || prevState.date_dropoff !== date_dropoff || prevState.time_dropoff !== time_dropoff ||
       prevState.date_pickup !== date_pickup || prevState.time_pickup !== time_pickup) {
-      const DateDropoff = new Date(date_dropoff);
-      const TimeDropoff = new Date(time_dropoff);
-      const DatePickup = new Date(date_pickup);
-      const TimePickup = new Date(time_pickup);
-
-      const drop_off_time = `${DateDropoff.getMonth() + 1}/${DateDropoff.getDate()}/${DateDropoff.getFullYear()} ${TimeDropoff.getHours()}:${TimeDropoff.getMinutes()}`;
-      const pick_up_time = `${DatePickup.getMonth() + 1}/${DatePickup.getDate()}/${DatePickup.getFullYear()} ${TimePickup.getHours()}:${TimePickup.getMinutes()}`;
+      let formDataRequestPrice = normalizeFormDataRequestPrice(date_dropoff, time_dropoff, date_pickup, time_pickup, item_count);
       const isValidTimeRange = checkPickupTimeValid(date_dropoff, time_dropoff, date_pickup, time_pickup)
       if (!isValidTimeRange) {
         this.CommonAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
         this.CommonAlert.show('warning');
         return;
       }
-      const dataPrice = {
-        "drop_off_time": drop_off_time,
-        "package_total": parseInt(item_count),
-        "pick_up_time": pick_up_time,
-      }
-      var price = await requestPrice(dataPrice);
+      this.loadingPrice.updateState('loading', true);
+      var price = await requestPrice(formDataRequestPrice);
       this.setState({
         price: price
-      })
+      }, () => this.loadingPrice.updateState('loading', false))
     }
 
   }
 
-  componentDidMount() {
-    //this.pricing.update("show", true);
+  async componentDidMount() {
+    const { date_dropoff, time_dropoff, date_pickup, time_pickup, item_count } = this.state;
+    let formDataRequestPrice = normalizeFormDataRequestPrice(date_dropoff, time_dropoff, date_pickup, time_pickup, item_count);
+    this.loadingPrice.updateState('loading', true);
 
+    var price = await requestPrice(formDataRequestPrice);
+    this.setState({
+      price: price
+    }, () => this.loadingPrice.updateState('loading', false))
   }
 
   onOpenPricing = () => {
@@ -138,7 +134,7 @@ class AddNewBooking extends React.Component {
           this.props.history.go(-1);
           this.props.updateState(STORAGE_ACTION.STORAGE_TAB, 1)
         }, 1000);
-        
+
       } else {
         this.CommonAlert.updateState("content", <span>Occurs an error when create new booking. Please try again!</span>);
         this.CommonAlert.show('warning');
@@ -336,7 +332,10 @@ class AddNewBooking extends React.Component {
           <hr />
           <div>
             <span className="label-estimated">Estimated Price</span>
-            <span className="price-esti">{vndStyle(this.state.price)} đ</span>
+            <CircleDataLoading
+              ref={ref => this.loadingPrice = ref}
+              content = {<span className="price-esti">{vndStyle(this.state.price)} đ</span>} 
+            />
           </div>
 
           <hr />
@@ -378,4 +377,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(null, mapDispatchToProps, null, {forwardRef: true})(AddNewBooking)
+export default connect(null, mapDispatchToProps, null, { forwardRef: true })(AddNewBooking)

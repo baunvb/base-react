@@ -122,6 +122,22 @@ export const getCookie = (cname) => {
     return "";
   }
 
-  export const setCookie = (key, value, day) => {
+export const setCookie = (key, value, day) => {
     document.cookie = `${key}=${value}; max-age=${day * DAY_IN_S}`;
-  }
+}
+
+export const normalizeFormDataRequestPrice = (date_dropoff, time_dropoff, date_pickup, time_pickup, item_count ) => {
+    const DateDropoff = new Date(date_dropoff);
+    const TimeDropoff = new Date(time_dropoff);
+    const DatePickup = new Date(date_pickup);
+    const TimePickup = new Date(time_pickup);
+
+    const drop_off_time = `${DateDropoff.getMonth() + 1}/${DateDropoff.getDate()}/${DateDropoff.getFullYear()} ${TimeDropoff.getHours()}:${TimeDropoff.getMinutes()}`;
+    const pick_up_time = `${DatePickup.getMonth() + 1}/${DatePickup.getDate()}/${DatePickup.getFullYear()} ${TimePickup.getHours()}:${TimePickup.getMinutes()}`;
+    
+    return {
+        "drop_off_time": drop_off_time,
+        "package_total": parseInt(item_count),
+        "pick_up_time": pick_up_time,
+    }
+}

@@ -4,7 +4,7 @@ import 'views/Booking/booking.css';
 import {STORAGE_ACTION} from '../../actions/StorageActions'
 
 import WhaleloInput from 'components/CustomInput/WhaleloInput.jsx'
-import { vndStyle, requestPrice, checkPickupTimeValid, validateEmail } from 'common/function.jsx';
+import { vndStyle, requestPrice, checkPickupTimeValid, normalizeFormDataRequestPrice } from 'common/function.jsx';
 import InfoIcon from 'assets/img/wlicon/icon_info.svg';
 import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
 import CommonAlert from 'components/Alert/CommonAlert.jsx'
@@ -15,6 +15,8 @@ import * as requestApi from 'api/requestApi.js';
 import { ITEMS, API } from 'config/Constant' //REQUEST_COMFIRM_APPOINTMENT
 import ImageViewer from '../../components/ImageViewer/ImageViewer';
 import Resizer from 'react-image-file-resizer';
+import CircleDataLoading from '../../components/Progress/CircleDataLoading.jsx'
+
 import {connect} from 'react-redux'
 class ComfirmUserBooking extends React.Component {
   constructor(props) {
@@ -56,30 +58,18 @@ class ComfirmUserBooking extends React.Component {
 
     if (prevState.item_count !== item_count || prevState.date_dropoff !== date_dropoff || prevState.time_dropoff !== time_dropoff ||
       prevState.date_pickup !== date_pickup || prevState.time_pickup !== time_pickup) {
-
-      const DateDropoff = new Date(date_dropoff);
-      const TimeDropoff = new Date(time_dropoff);
-      const DatePickup = new Date(date_pickup);
-      const TimePickup = new Date(time_pickup);
-
-      const drop_off_time = `${DateDropoff.getMonth() + 1}/${DateDropoff.getDate()}/${DateDropoff.getFullYear()} ${TimeDropoff.getHours()}:${TimeDropoff.getMinutes()}`;
-      const pick_up_time = `${DatePickup.getMonth() + 1}/${DatePickup.getDate()}/${DatePickup.getFullYear()} ${TimePickup.getHours()}:${TimePickup.getMinutes()}`;
+      let formDataRequestPrice = normalizeFormDataRequestPrice(date_dropoff, time_dropoff, date_pickup, time_pickup, item_count);
       const isValidTimeRange = checkPickupTimeValid(date_dropoff, time_dropoff, date_pickup, time_pickup)
       if (!isValidTimeRange) {
         this.CommonAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
         this.CommonAlert.show('warning');
         return;
       }
-      const dataPrice = {
-        "drop_off_time": drop_off_time,
-        "package_total": parseInt(item_count),
-        "pick_up_time": pick_up_time,
-      }
-
-      var price = await requestPrice(dataPrice);
+      this.loadingPrice.updateState('loading', true);
+      var price = await requestPrice(formDataRequestPrice);
       this.setState({
         price: price
-      })
+      }, () => this.loadingPrice.updateState('loading', false))
     }
 
   }
@@ -318,7 +308,10 @@ class ComfirmUserBooking extends React.Component {
           <hr />
           <div>
             <span className="label-estimated">Estimated Price</span>
-            <span className="price-esti">{vndStyle(this.state.price)} đ</span>
+            <CircleDataLoading
+              ref={ref => this.loadingPrice = ref}
+              content = {<span className="price-esti">{vndStyle(this.state.price)} đ</span>} 
+            />
           </div>
           <hr />
 

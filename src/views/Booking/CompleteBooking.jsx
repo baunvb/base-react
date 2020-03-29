@@ -14,10 +14,11 @@ import WhaleloAlert from 'components/Alert/WhaleloAlert.jsx'
 import CommonAlert from 'components/Alert/CommonAlert.jsx'
 import ImageViewer from '../../components/ImageViewer/ImageViewer';
 import {connect} from 'react-redux';
-import { vndStyle, normalizeDateTime, requestPrice, checkPickupTimeValid } from 'common/function.jsx';
+import { vndStyle, normalizeDateTime, requestPrice, checkPickupTimeValid, normalizeFormDataRequestPrice } from 'common/function.jsx';
 import * as requestApi from 'api/requestApi';
 import { API } from 'config/Constant';
 import { BASE_URL_IMG } from 'config/host.js';
+import CircleDataLoading from '../../components/Progress/CircleDataLoading.jsx'
 import { createGenerateClassName } from '@material-ui/core/styles';
 import JssProvider from 'react-jss/lib/JssProvider';
 const generateClassName = createGenerateClassName({
@@ -66,29 +67,19 @@ class CompleteBooking extends React.Component {
     const { date_dropoff, time_dropoff, date_pickup, time_pickup, item_count } = this.state;
 
     if (prevState.date_pickup !== date_pickup || prevState.time_pickup !== time_pickup) {
-      const DateDropoff = new Date(date_dropoff);
-      const TimeDropoff = new Date(time_dropoff);
-      const DatePickup = new Date(date_pickup);
-      const TimePickup = new Date(time_pickup);
-
-      const drop_off_time = `${DateDropoff.getMonth() + 1}/${DateDropoff.getDate()}/${DateDropoff.getFullYear()} ${TimeDropoff.getHours()}:${TimeDropoff.getMinutes()}`;
-      const pick_up_time = `${DatePickup.getMonth() + 1}/${DatePickup.getDate()}/${DatePickup.getFullYear()} ${TimePickup.getHours()}:${TimePickup.getMinutes()}`;
+      let formDataRequestPrice = normalizeFormDataRequestPrice(date_dropoff, time_dropoff, date_pickup, time_pickup, item_count);
+    
       const isValidTimeRange = checkPickupTimeValid(date_dropoff, time_dropoff, date_pickup, time_pickup)
       if (!isValidTimeRange) {
         this.CommonAlert.updateState("content", <span>From Pick-up time to Drop-off time is the least about 1 hour</span>);
         this.CommonAlert.show('warning');
         return;
       }
-      const dataPrice = {
-        "drop_off_time": drop_off_time,
-        "package_total": parseInt(item_count),
-        "pick_up_time": pick_up_time,
-      }
-
-      var price = await requestPrice(dataPrice);
+      this.loadingPrice.updateState('loading', true);
+      var price = await requestPrice(formDataRequestPrice);
       this.setState({
         price: price
-      })
+      }, () => this.loadingPrice.updateState('loading', false))
     }
 
   }
@@ -283,7 +274,10 @@ class CompleteBooking extends React.Component {
 
           <div>
             <span className="left-label">Total Amount:</span>
-            <span className="right-label">{vndStyle(this.state.price)} đ</span>
+            <CircleDataLoading
+              ref={ref => this.loadingPrice = ref}
+              content = {<span className="price-esti">{vndStyle(this.state.price)} đ</span>} 
+            />
           </div>
           <hr />
 
