@@ -15,7 +15,6 @@ import ListItemText from "material-ui/List/ListItemText";
 import Hidden from "material-ui/Hidden";
 import Collapse from "material-ui/transitions/Collapse";
 import IconWL from "assets/img/wlicon/icon_wl_sidebar.svg";
-import { connect } from 'react-redux'
 
 
 import avatar from "assets/img/faces/avatar.png";
@@ -93,11 +92,7 @@ class Sidebar extends React.Component {
   }
 
   componentDidMount() {
-    //get User profile
-    requestApi.postByToken(API.GET_INFO, {}, (res) => {
-      console.log("API.GET_INFO", res.data.station)
-      this.props.updateState(USER_ACTION.FETCH_INFO, res.data.station)
-    })
+    
   }
 
   onErrorAvatar = () => {
@@ -143,7 +138,7 @@ class Sidebar extends React.Component {
               <img src={IconWL} onError={this.onErrorAvatar} />
 
               <ListItemText
-                primary={this.props.profile.name}
+                primary="Nguyen Van Bau"
                 disableTypography={true}
                 className={itemText + " " + classes.userItemText}
               />
@@ -385,16 +380,5 @@ Sidebar.propTypes = {
   routes: PropTypes.arrayOf(PropTypes.object)
 };
 
-const mapStateToProps = (state, ownProps) => {
-  console.log("SESSION STATE", state.session)
-  return {
-    profile: state.user.user,
-  }
-}
-const mapDispatchToProps = dispatch => {
-  return {
-    updateState: (type, data) => dispatch({ type, data })
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(sidebarStyle)(Sidebar))
-//export default withStyles(sidebarStyle)(Sidebar);
+
+export default withStyles(sidebarStyle)(Sidebar);

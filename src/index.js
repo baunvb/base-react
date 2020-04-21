@@ -6,32 +6,25 @@ import myReducer from 'reducer/Reducer.jsx'
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
-import App from 'views/Pages/App';
+import App from 'views/App';
 import axios from "axios";
 import { host } from "config/host";
-import "assets/scss/material-dashboard-pro-react.css";
+import "assets/scss/main.css";
 import { createBrowserHistory } from "history";
 import { getCookie } from 'common/function.jsx'
 
-import '@mobiscroll/react/dist/css/mobiscroll.min.css';
-// import {validateSession} from 'common/function.jsx'
-
-//datime
-//import "pickerjs/picker.js";
-//import "pickerjs/picker.css";
 const hist = createBrowserHistory();
 // Add the sessionReducer
 
 const validateSession = () => {
-  const token_id = getCookie("token");
-   //return true;
-   return axios.post(host + "api/station/checktoken", {}, {
-    headers: {
-      "authorization": "Bearer " + token_id
-    }
-  }).then(res => res.data.code === 200);
+  // const token_id = getCookie("token");
+  //  return axios.post(host + "api/station/checktoken", {}, {
+  //   headers: {
+  //     "authorization": "Bearer " + token_id
+  //   }
+  // }).then(res => res.data.code === 200);
+  return true;
 }
-// Check token
 
 const options = { redirectPath: '', driver: 'COOKIES', validateSession };
 

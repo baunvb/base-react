@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import * as requestApi from 'api/requestApi';
 import { sessionService } from "redux-react-session";
 
-import { validateEmail , setCookie} from "common/function.jsx";
+import { validateEmail, setCookie } from "common/function.jsx";
 import "./login.css";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as sessionActions from 'actions/sessionActions';
 import PropTypes from "prop-types";
 import { withRouter } from 'react-router-dom';
 import logo from 'assets/img/wlicon/whalelo.png'
@@ -71,8 +69,6 @@ class LoginPage extends Component {
             this.setState({
                 invalidEmail: null
             })
-            // const { login } = this.props.actions;
-            // login(user, history);
 
             try {
                 var responseLogin = await axios.post(`${host}${API.LOGIN}`, user);
@@ -86,7 +82,7 @@ class LoginPage extends Component {
                     history.push('/home');
                 }
             } catch (err) {
-                console.log("responseLogin", err.response);
+                console.log("loginERR", err.response);
                 if (err.response.data.code === 400) {
                     this.setState({
                         invalidEmailOrPassword: (<span className="text-invalid">Email or password is invalid </span>)
@@ -101,12 +97,12 @@ class LoginPage extends Component {
     onChange(e) {
         const { value, name } = e.target;
         const { user } = this.state;
-        if(name === "email") {
+        if (name === "email") {
             user[name] = value.toLowerCase();
         } else {
             user[name] = value;
         }
-        
+
         this.setState({ user });
     }
 
@@ -136,9 +132,7 @@ class LoginPage extends Component {
     }
 
     render() {
-        const { classes } = this.props;
         const { isShowPassword, user } = this.state;
-        //const { user: { email, password } } = this.state;<button className="btn-login">Login</button>
         const LoginButton = withRouter(({ history }) => (
             <button className="btn-login" onClick={() => this.onSubmit(history)} type="submit">
                 Login
@@ -208,15 +202,5 @@ class LoginPage extends Component {
     }
 }
 
-const mapDispatch = (dispatch) => {
-    return {
-        actions: bindActionCreators(sessionActions, dispatch)
-    };
-};
 
-LoginPage.propTypes = {
-    classes: PropTypes.object.isRequired,
-    actions: PropTypes.object.isRequired
-};
-
-export default connect(null, mapDispatch)(withStyles(loginPageStyle)(LoginPage));
+export default withStyles(loginPageStyle)(LoginPage);
