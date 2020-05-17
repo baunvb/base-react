@@ -1,6 +1,0 @@
-const SAMPLE_ACTION = {
-  HELLO: "EXAMPLE_ACTION_HELLO",
-
-}
-
-export {SAMPLE_ACTION}
