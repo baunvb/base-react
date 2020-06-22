@@ -1,26 +1,41 @@
 
-import SampleHomeOne from "../screen/home/SampleHomeOne"
+import QAcademyScreen from "../screen/home/QAcademyScreen"
 import SampleHomeTwo from "../screen/home/SampleHomeTwo"
 
 export const HomeRouter = [
   {
-    path: "/home",
-    component: SampleHomeOne,
-    name: "Home"
+    path: "/q-academy",
+    component: QAcademyScreen,
+    name: "Q-Academy"
   },
   {
-    path: "/profile",
-    component: SampleHomeTwo,
-    name: "Profile"
+    path: "/q-visit",
+    component: QAcademyScreen,
+    name: "Q-Visit"
   },
   {
-    path: "/news",
-    component: null,
-    name: "NEWS"
+    path: "/q-online",
+    component: QAcademyScreen,
+    name: "OnlineQ"
   },
   {
-    path: "/schedule",
-    component: null,
-    name: "SCHEDULE"
+    path: "/q-outreach",
+    component: QAcademyScreen,
+    name: "Q-Outreach"
+  },
+  {
+    path: "/q-contest",
+    component: QAcademyScreen,
+    name: "Q-Contest"
+  },
+  {
+    path: "/q-shop",
+    component: QAcademyScreen,
+    name: "Q-Shop"
+  },
+  {
+    path: "/q-media",
+    component: QAcademyScreen,
+    name: "Q-Media"
   }
 ]

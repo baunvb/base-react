@@ -1,9 +1,8 @@
-// base home screen for user logined
 import React from "react";
-import PrivateHeader from "../component/Header/PrivateHeader"
+import HomeHeader from "../component/Header/HomeHeader"
 import { HomeRouter } from "../router/HomeRouter"
 import { Switch, Route, Redirect } from "react-router-dom";
-
+import TopHeader from "../component/Header/TopHeader";
 const switchRoutes = (
   <Switch>
     {HomeRouter.map((prop, key) => {
@@ -31,7 +30,8 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <PrivateHeader router={HomeRouter} {...this.props} />
+        <TopHeader />
+        <HomeHeader router={HomeRouter} {...this.props} />
         <div className="main">
           {switchRoutes}
         </div>
