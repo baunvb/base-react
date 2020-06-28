@@ -1,0 +1,173 @@
+.q-academy-pricing-main {
+    width: 100%;
+    background: #fff;
+}
+
+.q-academy-pricing-grid-item {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.q-academy-pricing-item {
+    background: #fff;
+    width: calc((100% - 14px) / 3);
+    margin-bottom: 14px;
+    box-sizing: border-box;
+    background: #FCFCFC;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
+}
+.q-academy-pricing-item-image {
+  width: 100%;
+  height: auto;
+  max-height: 180px;
+}
+.q-academy-pricing-item-content {
+  width: 100%;
+  padding: 16px 20px 20px 20px;
+  box-sizing: border-box;
+}
+.q-academy-pricing-item-excerpt {
+  display: inline-block;
+  margin-top: 8px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 25px;
+  text-align: justify;
+  word-wrap: break-word;
+  color: #321A05;
+
+}
+.q-academy-pricing-item-title {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 27px;
+  color: #E57519;
+}
+.q-academy-pricing-wrap-info {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  background: #515151;
+  box-sizing: border-box;
+  padding: 20px;
+  margin: 40px 0px;
+  justify-content: space-between;
+}
+
+.q-academy-pricing-wrap-info-column {
+  width: calc((100% - 30px) / 2);
+  height: auto;
+}
+.q-academy-pricing-info-title {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 27px;
+  color: #FFFFFF;
+  text-align: left;
+  width: 100%;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+.q-academy-pricing-info-detail {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  color: #E3E3E3;
+}
+.q-academy-pricing-left {
+  float: left;
+}
+.q-academy-pricing-right {
+  float: right;
+}
+.q-academy-pricing-item-price {
+  display: flow-root;
+}
+.q-academy-pricing-break-line {
+  flex-basis: 100%;
+}
+hr {
+  border-bottom: 1px;
+}
+/* 
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+
+@media (min-width: 1281px) {
+  
+    
+  }
+  
+  /* 
+    ##Device = Laptops, Desktops
+    ##Screen = B/w 1025px to 1280px
+  */
+  
+  @media (min-width: 1025px) and (max-width: 1280px) {
+    
+    
+  }
+  
+  /* 
+    ##Device = Tablets, Ipads (portrait)
+    ##Screen = B/w 768px to 1024px
+  */
+  
+  @media (min-width: 768px) and (max-width: 1024px) {
+    
+    
+  }
+  
+  /* 
+    ##Device = Tablets, Ipads (landscape)
+    ##Screen = B/w 768px to 1024px
+  */
+  
+  @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    
+    
+  }
+  
+  /* 
+    ##Device = Low Resolution Tablets, Mobiles (Landscape)
+    ##Screen = B/w 481px to 767px
+  */
+  
+  @media (min-width: 481px) and (max-width: 767px) {
+    
+    
+  }
+  
+  /* 
+    ##Device = Most of the Smartphones Mobiles (Portrait)
+    ##Screen = B/w 320px to 479px
+  */
+  
+  @media (max-width: 480px) {
+    .q-academy-pricing-item {
+        width: 100%;
+    }
+    .q-academy-pricing-wrap-info {
+      display: flex;
+      flex-direction: column;
+      
+    }
+    
+    .q-academy-pricing-wrap-info-column {
+      width: 100%;
+      height: auto;
+    }
+    .q-academy-pricing-item-excerpt {
+      font-size: 16px;
+
+    }
+    .q-academy-pricing-item-title {
+      font-size: 20px;
+    }
+  }

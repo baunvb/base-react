@@ -1,18 +1,21 @@
+// Login - register screen
+
 import React from "react";
-import PublicHeader from "../component/Header/PublicHeader"
-import { AuthorRouter } from "../router/AuthorRouter"
+import { AuthRouter } from "../router/AuthRouter"
 import { Switch, Route, Redirect } from "react-router-dom";
 
 const switchRoutes = (
   <Switch>
-    {AuthorRouter.map((prop, key) => {
+    {AuthRouter.map((prop, key) => {
+      if (prop.redirect)
+        return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
       return <Route path={prop.path} component={prop.component} key={key} />;
     })}
   </Switch>
 );
 
 
-class Author extends React.Component {
+class Auth extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,17 +24,13 @@ class Author extends React.Component {
   }
 
   componentDidMount() {
-
+    console.log("AUTH")
   }
 
-  componentWillMount() {
-
-  }
 
   render() {
     return (
       <div>
-        <PublicHeader router={AuthorRouter} {...this.props} />
         <div className="main">
           {switchRoutes}
         </div>
@@ -41,4 +40,4 @@ class Author extends React.Component {
 
 }
 
-export default Author;
+export default Auth;

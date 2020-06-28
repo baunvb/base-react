@@ -12,25 +12,30 @@ class HomeHeader extends React.Component {
     }
 
     activePath = (path) => {
-        return this.props.location.pathname.indexOf(path) > -1 ? true : false;
+        const pathName = this.props.location.pathname;
+        if(pathName === "/") {
+            if(path === "/") return true
+        } else {
+            if (path === "/") return false
+            return this.props.location.pathname.indexOf(path) > -1  ? true : false;
+        }
     }
 
     componentDidMount() {
 
     }
 
-    componentWillMount() {
-
-    }
 
     render() {
+        const {router} = this.props;
         return (
             <div className="home-header-main">
                 <SectionInner>
                     <div className="home-header-container">
                         {
-                            this.props.router.map((item) => {
+                            router.map((item, index) => {
                                 var classItem = "home-header-nav-link home-header-nav-link-border-right";
+                                if(index === router.length - 1) classItem = "home-header-nav-link"
                                 if (this.activePath(item.path)) classItem += " path-active"
                                 return (
                                     <NavLink

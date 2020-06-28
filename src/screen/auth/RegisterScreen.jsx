@@ -1,6 +1,7 @@
+// base home screen for user logined
 import React from "react";
 
-class QAcademyScreen extends React.Component {
+class RegisterScreen extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -12,16 +13,12 @@ class QAcademyScreen extends React.Component {
 
   }
 
-  componentWillMount(){
-
-  }
-
   render(){
     return (
-      <span>QAcademyScreen</span>
+      <span>RegisterScreen</span>
     )
   }
 
 }
 
-export default QAcademyScreen;
+export default RegisterScreen;

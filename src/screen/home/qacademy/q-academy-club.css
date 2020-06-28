@@ -1,0 +1,123 @@
+.q-academy-club-main {
+    width: 100%;
+    padding: 50px 0px;
+    background: #A9A9A9;
+}
+
+.q-academy-club-title {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 48px;
+    line-height: 59px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #FFFFFF;
+}
+.q-academy-wrap-title {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+}
+.q-academy-club-grid-item {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.q-academy-club-item {
+    background: #fff;
+    padding: 20px;
+    width: calc((100% - 28px) / 2);
+    margin-bottom: 28px;
+    box-sizing: border-box;
+}
+.q-academy-club-item-excerpt {
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 25px;
+  text-align: justify;
+  word-wrap: break-word;
+
+  color: #321A05;
+
+}
+.q-academy-club-item-title {
+  display: inline-block;
+  word-wrap: break-word;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 34px;
+  text-align: center;
+  color: #545454;
+}
+/* 
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+
+@media (min-width: 1281px) {
+  
+    
+  }
+  
+  /* 
+    ##Device = Laptops, Desktops
+    ##Screen = B/w 1025px to 1280px
+  */
+  
+  @media (min-width: 1025px) and (max-width: 1280px) {
+    
+    
+  }
+  
+  /* 
+    ##Device = Tablets, Ipads (portrait)
+    ##Screen = B/w 768px to 1024px
+  */
+  
+  @media (min-width: 768px) and (max-width: 1024px) {
+    
+    
+  }
+  
+  /* 
+    ##Device = Tablets, Ipads (landscape)
+    ##Screen = B/w 768px to 1024px
+  */
+  
+  @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    
+    
+  }
+  
+  /* 
+    ##Device = Low Resolution Tablets, Mobiles (Landscape)
+    ##Screen = B/w 481px to 767px
+  */
+  
+  @media (min-width: 481px) and (max-width: 767px) {
+    
+    
+  }
+  
+  /* 
+    ##Device = Most of the Smartphones Mobiles (Portrait)
+    ##Screen = B/w 320px to 479px
+  */
+  
+  @media(max-width: 480px) {
+    .q-academy-club-item {
+        width: 100%;
+    }
+    .q-academy-club-title {
+      font-size: 30px;
+    }
+    .q-academy-club-item-title {
+      font-size: 20px;
+    }
+    .q-academy-club-item-excerpt {
+      font-size: 16px;
+    }
+  }

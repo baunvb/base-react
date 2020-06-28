@@ -1,6 +1,5 @@
 
-import QAcademyScreen from "../screen/home/QAcademyScreen"
-import SampleHomeTwo from "../screen/home/SampleHomeTwo"
+import QAcademyScreen from "../screen/home/qacademy/QAcademyScreen"
 
 export const HomeRouter = [
   {
@@ -37,5 +36,6 @@ export const HomeRouter = [
     path: "/q-media",
     component: QAcademyScreen,
     name: "Q-Media"
-  }
+  },
+  { redirect: true, path: "/", pathTo: "/q-academy" }
 ]

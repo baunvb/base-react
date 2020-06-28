@@ -1,34 +1,37 @@
 import React from 'react';
-import PrivateRoute from "./component/PrivateRoute"
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { createBrowserHistory } from "history";
 
 import Home from "./layout/Home"
-import Author from "./layout/Author"
+import Auth from "./layout/Auth"
 
-const indexRoutes = ["/", "/login", "/register", "/profile",
-  "/q-academy"
+const indexRoutes = [
+  
+  {
+    path: '/auth',
+    component: Auth
+  },
+
+  //If add new layout, "/" router have to end of arr
+  {
+    path: '/',
+    component: Home
+  },
+
 ]
+
+const hist = createBrowserHistory();
 
 const App = () => {
   return (
-    <Router>
-      <div>
-        {
-          indexRoutes.map((prop, key) => {
-            switch (prop) {
-              case "":
-                break;
-              case "/login":
-              case "/register":
-                return (<Route path={prop} key={key} component={Author} />)
-              case "/q-academy":
-                return (<Route path={prop} key={key} component={Home} />)
-              default:
-                return (<PrivateRoute exact path={prop} component={null} authenticated={true} />)
-            }
+    <Router history={hist}>
+      <Switch>
+      {
+          indexRoutes.map((prop, key) => {           
+            return <Route path={prop.path} component={prop.component} key={key} />
           })
         }
-      </div>
+      </Switch>
     </Router>
   );
 }

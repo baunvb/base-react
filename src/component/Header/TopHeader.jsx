@@ -9,7 +9,7 @@ class TopHeader extends React.Component {
                 <SectionInner>
                     <div className="top-header-container">
                         <div className="top-header-left">
-                            <img src={require("../../assets/icon/logo.svg")} />
+                            <img className="top-header-logo" src={require("../../assets/icon/logo.svg")} />
                         </div>
                         <div className="top-header-right">
                             <div className="top-header-search">
